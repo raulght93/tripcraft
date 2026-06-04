@@ -7,4 +7,4 @@ compatibility_date = "2026-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "tripcraft"
-database_id = "REPLACE_WITH_D1_ID"
+database_id = "30e1c40b-0085-4950-8fcf-f24a805a9270"
