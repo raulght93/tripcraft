@@ -104,7 +104,7 @@
 | **GOTCHA: coste de salto latente** | A | `skip_f1`/`skip_f2` llevan `fixedCost` (vuelo directo) pero con 0 días el `fixedFactor` lo anula → **no se cobra**. Reproducido + test. ⏳ **decidir en Fase 1 si debe contarse.** | ⏳1 |
 | Add-ons por fase | A | `{id,icon,label,desc,cost[tier],days?}`. En `schema` como `addons`. | 1 |
 | Catálogo de especies | A | 71 especies: kind, activities, phases, favoritos (★), filtro "solo en mi viaje", tooltips de fechas. | 3 |
-| Motor de estacionalidad | A | `seasonality.js` + `seasonFit(phaseId, range)`: optimal/avoid/events (migración ñus, ciclones, tortugas, gorilas, festivales…). `SeasonBanner`. | 3 |
+| Motor de estacionalidad | A | `seasonFit(trip, phaseId, range)`: optimal/avoid/events (migración ñus, ciclones, tortugas, gorilas, festivales…). ✅ **engine + schema + 28 fases migradas + tests**. Pendiente UI `SeasonBanner` con fechas reales. | ✅ |
 | Checklist | A+B | Auto-items por fase + custom, deadlines con countdown, categorías, filtro persistido, progress bar. | 2 |
 | Perfiles rápidos | A+B | Presets que fijan varias prefs de golpe. | 2 |
 | Intereses | A | 6 (dive/safari/nature/culture/foodie/adventure) → fork recs. Backlog: filtrar checklist, destacar POIs, sugerir add-ons. | 2 |

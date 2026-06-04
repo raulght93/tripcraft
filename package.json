@@ -9,6 +9,8 @@
   "scripts": {
     "test": "node --experimental-strip-types --test \"packages/**/test/*.test.ts\"",
     "test:coverage": "node --experimental-strip-types --test --experimental-test-coverage \"packages/**/test/*.test.ts\"",
+    "test:web": "pnpm --filter @tripcraft/web test",
+    "build": "pnpm --filter @tripcraft/web build",
     "typecheck": "tsc -p packages/schema/tsconfig.json && tsc -p packages/engine/tsconfig.json",
     "lint": "biome check .",
     "format": "biome format --write ."

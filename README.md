@@ -22,11 +22,13 @@ Documentos del proyecto:
 - [`docs/engineering-standards.md`](docs/engineering-standards.md) — **estándar de calidad / clean code** (núcleo puro, tests ≥90%, a11y como gate, budget de bundle, DoD).
 
 En curso: **Fase 1 — engine genérico**. Hecho: esqueleto completo de Africa migrado
-al schema (28 fases + 7 forks + secuencia), motor (sequencer/coste/validación) con
-suite de paridad, y **gate de calidad cableado** (pnpm + tsc estricto + Biome + CI)
-tras la [review de Fase 1](docs/review-fase1.md). Modelo: tiers keyed, country ISO
-con bandera derivada, fuente única de tipos vía Valibot. Pendiente: contenido
-editorial, POIs, especies, seasonality, add-ons; y el shell `apps/web`.
+al schema (28 fases + 7 forks + secuencia), motor (sequencer/coste/**estacionalidad**/
+validación) con suite de paridad, **gate de calidad cableado** (pnpm + tsc estricto +
+Biome + CI) tras la [review de Fase 1](docs/review-fase1.md), y **shell `apps/web`**
+(Vite + React): tabs derivadas de `trip.sequence`, coste por el engine, tema
+light/dark/auto, validación en la frontera, tests RTL + axe. Modelo: tiers keyed,
+country ISO con bandera derivada, fuente única de tipos vía Valibot.
+Pendiente: contenido editorial, POIs, especies, add-ons; mapas; y enriquecer la UI.
 
 ## Desarrollo
 

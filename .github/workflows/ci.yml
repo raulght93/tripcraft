@@ -19,5 +19,9 @@ jobs:
         run: pnpm typecheck
       - name: Lint + formato (Biome)
         run: pnpm lint
-      - name: Tests (node:test) + cobertura
+      - name: Tests núcleo (node:test) + cobertura
         run: pnpm test:coverage
+      - name: Tests web (Vitest + axe)
+        run: pnpm test:web
+      - name: Build web (Vite)
+        run: pnpm build

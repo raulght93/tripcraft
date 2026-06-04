@@ -1,0 +1,71 @@
+import { phaseCost } from "@tripcraft/engine";
+import { useState } from "react";
+import { colors, fonts, radii, shadows } from "../styles/tokens.js";
+import { useTrip } from "../trip/TripContext.jsx";
+
+const fmtEUR = (n) => `${Math.round(n).toLocaleString("es-ES")} €`;
+
+export function ForkView({ forkId }) {
+  const { trip, forkChoice, pickFork, tier, phaseById } = useTrip();
+  const [ringId, setRingId] = useState(null);
+  const fork = trip.forks.find((f) => f.id === forkId);
+  if (!fork) return null;
+  const chosen = forkChoice[forkId] ?? fork.default;
+
+  return (
+    <section
+      aria-labelledby={`fork-${forkId}-title`}
+      style={{ padding: 20, fontFamily: fonts.sans, color: colors.text }}
+    >
+      <h2
+        id={`fork-${forkId}-title`}
+        style={{ fontFamily: fonts.serif, fontSize: 28, margin: "0 0 16px" }}
+      >
+        <span aria-hidden="true">{fork.icon ?? "🔀"}</span> {fork.label}
+      </h2>
+
+      <div
+        role="radiogroup"
+        aria-labelledby={`fork-${forkId}-title`}
+        style={{ display: "grid", gap: 10 }}
+      >
+        {fork.options.map((optId) => {
+          const phase = phaseById[optId];
+          const isChosen = optId === chosen;
+          const isSkip = (fork.omitWhenSelected ?? []).includes(optId);
+          const cost = phase && !isSkip ? phaseCost(trip, optId, phase.daysBase, tier) : 0;
+          return (
+            <button
+              type="button"
+              key={optId}
+              role="radio"
+              aria-checked={isChosen}
+              onClick={() => pickFork(forkId, optId)}
+              onFocus={() => setRingId(optId)}
+              onBlur={() => setRingId(null)}
+              style={{
+                textAlign: "left",
+                padding: "12px 16px",
+                borderRadius: radii.md,
+                border: `2px solid ${isChosen ? colors.accent : colors.border}`,
+                background: colors.surface,
+                color: colors.text,
+                cursor: "pointer",
+                boxShadow: ringId === optId ? shadows.ring : "none",
+              }}
+            >
+              <div style={{ fontWeight: 600 }}>
+                {phase?.title ?? optId} {isChosen ? "✓" : ""}
+              </div>
+              <div style={{ fontSize: 13, color: colors.muted }}>
+                {isSkip
+                  ? "El viaje sigue de largo"
+                  : `≈ ${fmtEUR(cost)} · ${phase?.daysBase ?? 0} días`}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

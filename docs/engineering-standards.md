@@ -55,8 +55,12 @@
 
 - **Biome** (lint + formato en una herramienta, rápido, baja config) como base.
   Alternativa si falta regla: ESLint + `eslint-plugin-jsx-a11y`.
-- **A11y como gate de CI:** `jsx-a11y` + axe en los tests de componentes. Un fallo
-  de accesibilidad **rompe el build**, no es un aviso (ver §6).
+- **A11y como gate de CI:** **axe** (jest-axe) en los tests de componentes es el
+  gate real — un fallo de accesibilidad **rompe el build**, no es un aviso (ver §6).
+  Biome aporta reglas a11y estáticas adicionales. *Excepción documentada:*
+  `useSemanticElements` está **off** — choca con patrones ARIA de widget legítimos
+  que usamos a propósito (tarjetas `role="radio"`/`role="tab"` con contenido rico);
+  la corrección real la garantiza axe.
 - **Pipeline CI** (GitHub Actions, [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):
   `typecheck` → `lint` → `test:coverage`. Verde obligatorio para merge. Pendiente
   de añadir `build` + `size-limit` cuando exista `apps/web`.
