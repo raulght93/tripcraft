@@ -4,7 +4,14 @@ import { afterEach, expect, test } from "vitest";
 import { App } from "../src/App.jsx";
 import { TripProvider } from "../src/trip/TripContext.jsx";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  try {
+    localStorage.clear(); // evita que la selección persistida contamine otros tests
+  } catch {
+    /* noop */
+  }
+});
 
 // El viaje se carga de forma asíncrona (loadTrip → import dinámico + validateTrip),
 // así que esperamos a que aparezca la tablist antes de aseverar.
@@ -27,10 +34,20 @@ test("las tabs se derivan de trip.sequence (meta + forks + fases + extensiones)"
   expect(within(tablist).getByRole("tab", { name: /Extensiones/ })).toBeInTheDocument();
 });
 
-test("el tab por defecto (Itinerario) muestra la línea temporal datada", async () => {
+test("el tab por defecto (Itinerario) muestra la línea temporal datada y los totales", async () => {
   await renderApp();
   expect(screen.getByText(/Watamu balance/)).toBeInTheDocument();
   expect(screen.getByText(/Fecha de inicio/)).toBeInTheDocument();
+  expect(screen.getByText(/Duración total/)).toBeInTheDocument();
+  expect(screen.getByText(/Coste por persona/)).toBeInTheDocument();
+});
+
+test("ajustar los días de una fase recalcula su coste", async () => {
+  await renderApp();
+  fireEvent.click(screen.getByRole("tab", { name: /Safari Kenya/ }));
+  expect(screen.getByText(/3050|3\.050/)).toBeInTheDocument(); // 13 días mid
+  fireEvent.click(screen.getByRole("button", { name: /Quitar un día/ }));
+  expect(screen.getByText(/2820|2\.820/)).toBeInTheDocument(); // 12 días: 12·230 + 60
 });
 
 test("clic en una etapa de fork del itinerario navega a su tab de decisión", async () => {

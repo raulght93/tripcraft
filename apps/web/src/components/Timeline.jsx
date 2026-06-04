@@ -1,4 +1,4 @@
-import { displayFlag, seasonFit } from "@tripcraft/engine";
+import { applyTravelersMultiplier, displayFlag, seasonFit } from "@tripcraft/engine";
 import { useMemo } from "react";
 import { useResponsive } from "../hooks/useResponsive.js";
 import { decisionPhases, phaseToTab } from "../lib/tabs.js";
@@ -11,10 +11,12 @@ const fmtDate = (iso) =>
   );
 
 const DOT = { optimal: "#1f7a3f", good: "#3f7a1f", mixed: "#8a6d1f", suboptimal: "#9a3b1f" };
+const fmtEUR = (n) => `${Math.round(n).toLocaleString("es-ES")} €`;
 
 export function Timeline({ onSelectPhase }) {
-  const { trip, startDate, setStartDate, itinerary, phaseById } = useTrip();
+  const { trip, startDate, setStartDate, itinerary, phaseById, totals } = useTrip();
   const { isMobile } = useResponsive();
+  const travelers = trip.meta.travelersDefault ?? 1;
   const tabOf = useMemo(() => phaseToTab(trip), [trip]);
   const decisions = useMemo(() => decisionPhases(trip), [trip]);
   const end = itinerary.at(-1)?.endISO;
@@ -30,6 +32,38 @@ export function Timeline({ onSelectPhase }) {
         el <strong>nivel</strong> y la <strong>fecha de inicio</strong>, y las fechas se recalculan
         solas.
       </p>
+
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 16,
+          padding: "12px 16px",
+          marginBottom: 16,
+          borderRadius: radii.md,
+          background: colors.surface,
+          border: `1px solid ${colors.border}`,
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 12, color: colors.muted }}>Duración total</div>
+          <div style={{ fontSize: 22, fontFamily: fonts.serif }}>{totals.totalDays} días</div>
+        </div>
+        <div>
+          <div style={{ fontSize: 12, color: colors.muted }}>Coste por persona</div>
+          <div style={{ fontSize: 22, fontFamily: fonts.serif, color: colors.accent }}>
+            ≈ {fmtEUR(totals.perPerson)}
+          </div>
+        </div>
+        {travelers > 1 ? (
+          <div>
+            <div style={{ fontSize: 12, color: colors.muted }}>Para {travelers} viajeros</div>
+            <div style={{ fontSize: 22, fontFamily: fonts.serif, color: colors.accent }}>
+              ≈ {fmtEUR(applyTravelersMultiplier(trip, totals.perPerson, travelers))}
+            </div>
+          </div>
+        ) : null}
+      </div>
 
       <label
         style={{

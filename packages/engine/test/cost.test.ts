@@ -3,7 +3,13 @@ import assert from "node:assert/strict";
 // fórmula: activos·daily + descanso·daily·0.5 + voluntariado·8 + fijo·factor.
 import { test } from "node:test";
 import { AFRICA_TRIP } from "../../../trips/africa/src/index.js";
-import { addonsCostFor, addonsDaysFor, applyTravelersMultiplier, phaseCost } from "../src/index.ts";
+import {
+  addonsCostFor,
+  addonsDaysFor,
+  applyTravelersMultiplier,
+  phaseCost,
+  tripTotals,
+} from "../src/index.ts";
 
 const T = AFRICA_TRIP as never;
 
@@ -82,6 +88,17 @@ test("add-ons: coste y días extra de los seleccionados", () => {
 test("multiplicador por viajeros sale de costMultiplierRule (no hardcode)", () => {
   assert.equal(applyTravelersMultiplier(T, 1875, 1), 1875);
   assert.equal(applyTravelersMultiplier(T, 1875, 2), 3188); // round(1875·1.7)
+});
+
+test("tripTotals suma días y coste por persona de las fases activas", () => {
+  const ids = ["watamu", "safari-ke"];
+  const t = tripTotals(T, ids, "mid"); // 25·75 + (13·230+60) = 1875 + 3050
+  assert.equal(t.totalDays, 38);
+  assert.equal(t.perPerson, 4925);
+  // Con override de días en watamu (10): 10·75 + 3050.
+  const t2 = tripTotals(T, ids, "mid", { watamu: 10 });
+  assert.equal(t2.totalDays, 23);
+  assert.equal(t2.perPerson, 3800);
 });
 
 test("multiplicador: grupo no listado en factorBy → fallback lineal ×N (issue #9)", () => {

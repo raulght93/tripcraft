@@ -4,8 +4,9 @@ export {
   addonsDaysFor,
   applyTravelersMultiplier,
   findPhase,
+  tripTotals,
 } from "./cost.ts";
-export type { CostOpts } from "./cost.ts";
+export type { CostOpts, TripTotals } from "./cost.ts";
 
 export {
   buildActivePhaseIds,

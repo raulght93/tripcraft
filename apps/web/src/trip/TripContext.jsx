@@ -1,4 +1,9 @@
-import { buildActivePhaseIds, computeItinerary, itineraryByPhase } from "@tripcraft/engine";
+import {
+  buildActivePhaseIds,
+  computeItinerary,
+  itineraryByPhase,
+  tripTotals,
+} from "@tripcraft/engine";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { colors, fonts } from "../styles/tokens.js";
 import { loadTrip } from "./loadTrip.js";
@@ -39,6 +44,7 @@ function TripState({ trip, children }) {
   const [startDate, setStartDateState] = useState(() =>
     loadLS(lsKey(trip.id, "start"), trip.meta.dateWindowDefault?.start ?? "2026-01-01"),
   );
+  const [daysByPhase, setDaysByPhase] = useState(() => loadLS(lsKey(trip.id, "days"), {}));
 
   const pickFork = useCallback(
     (forkId, optionId) =>
@@ -63,6 +69,21 @@ function TripState({ trip, children }) {
     },
     [trip.id],
   );
+  /** Ajusta los días de una fase, respetando [daysMin, daysMax] de la fase. */
+  const setDays = useCallback(
+    (phaseId, value) => {
+      const phase = trip.phases.find((p) => p.id === phaseId);
+      const clamped = phase
+        ? Math.max(phase.daysMin, Math.min(phase.daysMax, value))
+        : Math.max(0, value);
+      setDaysByPhase((prev) => {
+        const next = { ...prev, [phaseId]: clamped };
+        saveLS(lsKey(trip.id, "days"), next);
+        return next;
+      });
+    },
+    [trip],
+  );
 
   const activePhaseIds = useMemo(
     () => buildActivePhaseIds(trip, { forkChoice }),
@@ -70,13 +91,20 @@ function TripState({ trip, children }) {
   );
   const phaseById = useMemo(() => Object.fromEntries(trip.phases.map((p) => [p.id, p])), [trip]);
   const itinerary = useMemo(
-    () => computeItinerary(trip, startDate, activePhaseIds),
-    [trip, startDate, activePhaseIds],
+    () => computeItinerary(trip, startDate, activePhaseIds, daysByPhase),
+    [trip, startDate, activePhaseIds, daysByPhase],
   );
   const legByPhase = useMemo(() => itineraryByPhase(itinerary), [itinerary]);
+  const totals = useMemo(
+    () => tripTotals(trip, activePhaseIds, tier, daysByPhase),
+    [trip, activePhaseIds, tier, daysByPhase],
+  );
 
   // Selección del usuario (lo que se persiste como StoredTrip.state).
-  const selection = useMemo(() => ({ forkChoice, tier, startDate }), [forkChoice, tier, startDate]);
+  const selection = useMemo(
+    () => ({ forkChoice, tier, startDate, daysByPhase }),
+    [forkChoice, tier, startDate, daysByPhase],
+  );
   const applyState = useCallback(
     (s) => {
       if (!s) return;
@@ -86,6 +114,10 @@ function TripState({ trip, children }) {
       }
       if (s.tier) setTier(s.tier);
       if (s.startDate) setStartDate(s.startDate);
+      if (s.daysByPhase) {
+        setDaysByPhase(s.daysByPhase);
+        saveLS(lsKey(trip.id, "days"), s.daysByPhase);
+      }
     },
     [trip.id, setTier, setStartDate],
   );
@@ -103,6 +135,9 @@ function TripState({ trip, children }) {
       phaseById,
       itinerary,
       legByPhase,
+      daysByPhase,
+      setDays,
+      totals,
       selection,
       applyState,
     }),
@@ -118,6 +153,9 @@ function TripState({ trip, children }) {
       phaseById,
       itinerary,
       legByPhase,
+      daysByPhase,
+      setDays,
+      totals,
       selection,
       applyState,
     ],

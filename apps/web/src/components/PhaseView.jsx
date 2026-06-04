@@ -40,16 +40,39 @@ function WarningBanner({ text, tone }) {
   );
 }
 
+const stepBtn = (label, onClick, disabled) => (
+  <button
+    type="button"
+    aria-label={label}
+    onClick={onClick}
+    disabled={disabled}
+    style={{
+      width: 34,
+      height: 34,
+      borderRadius: radii.sm,
+      border: `1px solid ${colors.border}`,
+      background: colors.surfaceAlt,
+      color: colors.text,
+      fontSize: 18,
+      cursor: disabled ? "default" : "pointer",
+      opacity: disabled ? 0.4 : 1,
+    }}
+  >
+    {label === "Quitar un día" ? "−" : "+"}
+  </button>
+);
+
 export function PhaseView({ phaseId, onNavigate }) {
-  const { trip, tier, phaseById, legByPhase } = useTrip();
+  const { trip, tier, phaseById, daysByPhase, setDays } = useTrip();
   const { isMobile } = useResponsive();
   const phase = phaseById[phaseId];
   if (!phase) return null;
 
-  const days = legByPhase[phaseId]?.days || phase.daysBase;
+  const days = daysByPhase[phaseId] ?? phase.daysBase;
   const cost = phaseCost(trip, phaseId, days, tier);
   const pois = poisFor(trip, phaseId);
   const species = speciesForPhase(trip, phaseId);
+  const adjustable = phase.daysMax > phase.daysMin;
 
   return (
     <section
@@ -77,9 +100,22 @@ export function PhaseView({ phaseId, onNavigate }) {
       >
         <span aria-hidden="true">{displayFlag(phase)}</span> {phase.title}
       </h2>
-      <p style={{ color: colors.muted, margin: "0 0 16px" }}>
-        {days} días · {phase.daysMin}–{phase.daysMax} ajustable
-      </p>
+      {adjustable ? (
+        <div
+          role="group"
+          aria-label="Días en esta etapa"
+          style={{ display: "flex", alignItems: "center", gap: 10, margin: "0 0 16px" }}
+        >
+          {stepBtn("Quitar un día", () => setDays(phaseId, days - 1), days <= phase.daysMin)}
+          <span style={{ fontWeight: 600, minWidth: 64, textAlign: "center" }}>{days} días</span>
+          {stepBtn("Añadir un día", () => setDays(phaseId, days + 1), days >= phase.daysMax)}
+          <span style={{ fontSize: 13, color: colors.muted }}>
+            ({phase.daysMin}–{phase.daysMax})
+          </span>
+        </div>
+      ) : (
+        <p style={{ color: colors.muted, margin: "0 0 16px" }}>{days} días</p>
+      )}
 
       <div
         style={{

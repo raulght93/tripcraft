@@ -78,6 +78,30 @@ export const addonsDaysFor = (
   return total;
 };
 
+export interface TripTotals {
+  totalDays: number;
+  /** Coste total por persona sumando las fases activas (días activos por fase). */
+  perPerson: number;
+}
+
+/** Totales del viaje: días y coste por persona sobre las fases activas. */
+export const tripTotals = (
+  trip: Trip,
+  activePhaseIds: string[],
+  tier: string,
+  daysByPhase: Record<string, number> = {},
+): TripTotals => {
+  let totalDays = 0;
+  let perPerson = 0;
+  for (const id of activePhaseIds) {
+    const phase = findPhase(trip, id);
+    const days = daysByPhase[id] ?? phase?.daysBase ?? 0;
+    totalDays += days;
+    perPerson += phaseCost(trip, id, days, tier);
+  }
+  return { totalDays, perPerson };
+};
+
 /**
  * Aplica el multiplicador por nº de viajeros definido en el viaje.
  *
