@@ -24,6 +24,8 @@ Tomadas el 2026-06-04 (ver §6 para las que aún quedan abiertas):
 | **TypeScript** | Solo en `packages/schema` + `packages/engine` | El schema se define con **Valibot** (1 fuente → tipos TS *y* validación runtime). `trips/*` y la UI siguen en JS (`allowJs`). |
 | **Backend / DB** | Cloudflare Workers + **D1 (SQL)** | Evoluciona el patrón Worker+KV del Vasco a SQL para "mis viajes por usuario". KV para cachés/sesiones. |
 | **Auth** | Propia ligera sobre Workers | Token de dispositivo anónimo → magic-link opcional. Supabase como plan B. |
+| **Calidad / clean code** | Estándar formal desde el día 1 | Núcleo puro testeable, tests ≥90%, a11y como gate de CI, budget de bundle, DoD. Ver [`docs/engineering-standards.md`](docs/engineering-standards.md). |
+| **Preservación de features** | Inventario vivo | Todo lo de Africa/Basque (estética, temas, a11y, animaciones, integraciones, gotchas) catalogado por fase. Ver [`docs/feature-inventory.md`](docs/feature-inventory.md). |
 
 ---
 

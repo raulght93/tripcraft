@@ -11,11 +11,16 @@ que consume el viaje como **datos** en vez de tenerlo cableado en el código.
 
 ## Estado
 
-📋 **Planificación.** Ver [`PRODUCT-ROADMAP.md`](PRODUCT-ROADMAP.md) para el plan
-completo, el MVP y el roadmap por fases.
+📋 **Planificación + Fase 0 completada** (spike 23/23 OK — `npm run spike`).
 
-Trabajo actual: **Fase 0 — spike del Trip Schema**
-(ver [`docs/trip-schema-draft.md`](docs/trip-schema-draft.md)).
+Documentos del proyecto:
+- [`PRODUCT-ROADMAP.md`](PRODUCT-ROADMAP.md) — análisis, MVP, roadmap por fases, decisiones.
+- [`docs/trip-schema-draft.md`](docs/trip-schema-draft.md) — Trip Schema + resultados del spike.
+- [`docs/hosting-comparison.md`](docs/hosting-comparison.md) — estudio de despliegue (2026).
+- [`docs/feature-inventory.md`](docs/feature-inventory.md) — **inventario de preservación**: todo lo de Africa/Basque (estética, temas, a11y, animaciones, integraciones, gotchas) marcado por fase, para no perder nada.
+- [`docs/engineering-standards.md`](docs/engineering-standards.md) — **estándar de calidad / clean code** (núcleo puro, tests ≥90%, a11y como gate, budget de bundle, DoD).
+
+Siguiente: **Fase 1 — engine genérico** (migrar el resto de Africa al schema).
 
 ## Stack previsto
 
