@@ -35,10 +35,17 @@ const toVars = (palette) =>
 if (typeof document !== "undefined" && !document.getElementById("tc-theme-vars")) {
   const el = document.createElement("style");
   el.id = "tc-theme-vars";
-  el.textContent =
-    `:root{${toVars(LIGHT)}}` +
-    `[data-theme="dark"]{${toVars(DARK)}}` +
-    `@media (prefers-color-scheme:dark){:root:not([data-theme]){${toVars(DARK)}}}`;
+  // Variables de tema + base reset + accesibilidad (foco visible por teclado en
+  // TODO control, sin robar el outline al ratón; respeto de prefers-reduced-motion).
+  el.textContent = `
+:root{${toVars(LIGHT)}}
+[data-theme="dark"]{${toVars(DARK)}}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){${toVars(DARK)}}}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+:focus-visible{outline:2px solid var(--c-ring);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}`;
   document.head.appendChild(el);
 }
 

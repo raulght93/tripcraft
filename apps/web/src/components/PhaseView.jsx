@@ -1,4 +1,5 @@
 import { displayFlag, phaseCost, poisFor, speciesForPhase } from "@tripcraft/engine";
+import { useResponsive } from "../hooks/useResponsive.js";
 import { colors, fonts, radii } from "../styles/tokens.js";
 import { useTrip } from "../trip/TripContext.jsx";
 import { SeasonBanner } from "./SeasonBanner.jsx";
@@ -41,6 +42,7 @@ function WarningBanner({ text, tone }) {
 
 export function PhaseView({ phaseId, onNavigate }) {
   const { trip, tier, phaseById, legByPhase } = useTrip();
+  const { isMobile } = useResponsive();
   const phase = phaseById[phaseId];
   if (!phase) return null;
 
@@ -52,7 +54,7 @@ export function PhaseView({ phaseId, onNavigate }) {
   return (
     <section
       aria-labelledby={`phase-${phaseId}-title`}
-      style={{ padding: 20, fontFamily: fonts.sans, color: colors.text }}
+      style={{ padding: isMobile ? 14 : 20, fontFamily: fonts.sans, color: colors.text }}
     >
       {phase.hero ? (
         <img
@@ -61,7 +63,7 @@ export function PhaseView({ phaseId, onNavigate }) {
           loading="eager"
           style={{
             width: "100%",
-            maxHeight: 260,
+            maxHeight: isMobile ? 180 : 260,
             objectFit: "cover",
             borderRadius: radii.lg,
             marginBottom: 16,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useResponsive } from "../hooks/useResponsive.js";
 import { colors, fonts, radii, shadows } from "../styles/tokens.js";
 import { useTrip } from "../trip/TripContext.jsx";
 
@@ -6,6 +7,7 @@ const TIER_LABEL = { low: "Mochilero", mid: "Equilibrado", high: "Lujo" };
 
 export function Header({ theme, onCycleTheme }) {
   const { trip, tier, setTier } = useTrip();
+  const { isMobile } = useResponsive();
   const [ring, setRing] = useState(false);
 
   return (
@@ -13,8 +15,8 @@ export function Header({ theme, onCycleTheme }) {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 16,
-        padding: "14px 20px",
+        gap: 12,
+        padding: isMobile ? "10px 14px" : "14px 20px",
         background: colors.surface,
         borderBottom: `1px solid ${colors.border}`,
         flexWrap: "wrap",
@@ -24,10 +26,10 @@ export function Header({ theme, onCycleTheme }) {
         style={{
           margin: 0,
           fontFamily: fonts.serif,
-          fontSize: 24,
+          fontSize: isMobile ? 20 : 24,
           color: colors.text,
           flex: 1,
-          minWidth: 200,
+          minWidth: isMobile ? 140 : 200,
         }}
       >
         {trip.title}

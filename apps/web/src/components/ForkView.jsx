@@ -21,10 +21,24 @@ export function ForkView({ forkId, onNavigate }) {
     >
       <h2
         id={`fork-${forkId}-title`}
-        style={{ fontFamily: fonts.serif, fontSize: 28, margin: "0 0 16px" }}
+        style={{ fontFamily: fonts.serif, fontSize: 28, margin: "0 0 6px" }}
       >
         <span aria-hidden="true">{fork.icon ?? "🔀"}</span> {fork.label}
       </h2>
+      <p
+        style={{
+          margin: "0 0 16px",
+          padding: "8px 12px",
+          borderRadius: radii.sm,
+          background: colors.surfaceAlt,
+          border: `1px dashed ${colors.accent}`,
+          color: colors.text,
+          fontSize: 14,
+        }}
+      >
+        🔀 <strong>Etapa con alternativas.</strong> Elige una opción — el resto del itinerario, las
+        fechas y el coste se recalculan según tu elección.
+      </p>
 
       <div
         role="radiogroup"

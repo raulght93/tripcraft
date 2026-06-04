@@ -33,6 +33,14 @@ test("el tab por defecto (Itinerario) muestra la línea temporal datada", async 
   expect(screen.getByText(/Fecha de inicio/)).toBeInTheDocument();
 });
 
+test("clic en una etapa de fork del itinerario navega a su tab de decisión", async () => {
+  await renderApp();
+  // En la ruta por defecto, "Watamu" es una opción del fork "Costa Kenia": el paso
+  // del itinerario debe llevar a la tab del fork (antes no navegaba a ningún sitio).
+  fireEvent.click(screen.getByRole("button", { name: /Etapa 1: Watamu balance/ }));
+  expect(screen.getByText(/Etapa con alternativas/)).toBeInTheDocument();
+});
+
 test("el fork Costa Kenia muestra sus opciones con coste por el engine", async () => {
   await renderApp();
   fireEvent.click(screen.getByRole("tab", { name: /Costa Kenia/ }));
