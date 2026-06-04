@@ -49,9 +49,16 @@ export interface Fork {
   id: string;
   label: string;
   icon?: string;
-  /** phaseIds candidatos. Una opción "skip_*" significa "no incluir nada". */
+  /** phaseIds candidatos. TODA opción debe existir como phase. */
   options: string[];
   default: string;
+  /**
+   * Opciones que, al elegirse, NO añaden nada a la ruta (el viaje sigue de largo).
+   * Modela el matiz de Africa: fork_uganda/fork_westafrica omiten su "skip", pero
+   * skip_f1/skip_f2 NO están aquí → permanecen como fases de coste-cero que cargan
+   * el coste del vuelo directo. Sustituye la frágil heurística de prefijo "skip_".
+   */
+  omitWhenSelected?: string[];
   recs?: ForkRecs;
 }
 

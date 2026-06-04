@@ -32,6 +32,7 @@ export const ForkSchema = v.object({
   icon: v.optional(v.string()),
   options: v.pipe(v.array(v.string()), v.minLength(1)),
   default: v.string(),
+  omitWhenSelected: v.optional(v.array(v.string())),
   recs: v.optional(v.record(v.string(), v.record(v.string(), v.string()))),
 });
 

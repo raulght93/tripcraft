@@ -111,8 +111,9 @@
 
 ## Criterios de éxito del spike — ✅ COMPLETADO (2026-06-04)
 
-Ejecutable: `npm run spike` (Node ≥22.6, sin instalar nada). **23/23 OK.**
-Código: [`spike/verify.ts`](../spike/verify.ts) · datos: [`trips/africa/src/index.js`](../trips/africa/src/index.js)
+Ejecutable: `npm test` (Node ≥22.6, sin instalar nada). El spike de Fase 0 se
+**graduó a la suite del engine**: [`packages/engine/test/`](../packages/engine/test/)
+· datos: [`trips/africa/src/index.js`](../trips/africa/src/index.js)
 · motor: [`packages/engine/src/`](../packages/engine/src/).
 
 - [x] `watamu` (+ su fork `fork_costa_ke` y la fase fija `safari-ke`) se expresa

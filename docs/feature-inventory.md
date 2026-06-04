@@ -98,9 +98,10 @@
 
 | Sistema | Origen | Detalle a preservar | Fase |
 |---|---|---|---|
-| Modelo de coste por tier | A | Días activos/descanso(×0.5)/voluntariado(×8€) + fijo·factor + add-ons; multiplicador viajeros. ✅ **ya en `engine` (spike).** | ✅1 |
-| Forks (bifurcaciones) | A | 7 forks con opciones, default, `skip_*`, recs por budget×interés. ✅ **ya en `engine`/`schema`.** | ✅1 |
-| Extensiones reordenables | A | `extensionGroup` en `sequence`. ✅ **resuelto en spike.** | ✅1 |
+| Modelo de coste por tier | A | Días activos/descanso(×0.5)/voluntariado(×8€) + fijo·factor + add-ons; multiplicador viajeros. ✅ **`engine` + tests de paridad.** | ✅1 |
+| Forks (bifurcaciones) | A | 7 forks con opciones, default, recs por budget×interés. Omisión vía `omitWhenSelected` (no prefijo). ✅ **`engine`/`schema` + tests.** | ✅1 |
+| Extensiones reordenables | A | `extensionGroup` en `sequence`. ✅ **`engine` + test de orden.** | ✅1 |
+| **GOTCHA: coste de salto latente** | A | `skip_f1`/`skip_f2` llevan `fixedCost` (vuelo directo) pero con 0 días el `fixedFactor` lo anula → **no se cobra**. Reproducido + test. ⏳ **decidir en Fase 1 si debe contarse.** | ⏳1 |
 | Add-ons por fase | A | `{id,icon,label,desc,cost[tier],days?}`. En `schema` como `addons`. | 1 |
 | Catálogo de especies | A | 71 especies: kind, activities, phases, favoritos (★), filtro "solo en mi viaje", tooltips de fechas. | 3 |
 | Motor de estacionalidad | A | `seasonality.js` + `seasonFit(phaseId, range)`: optimal/avoid/events (migración ñus, ciclones, tortugas, gorilas, festivales…). `SeasonBanner`. | 3 |

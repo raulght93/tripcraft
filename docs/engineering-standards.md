@@ -35,8 +35,11 @@
 
 ## 3. Tests (no opcional)
 
-- **Runner: Vitest.** El [spike](../spike/verify.ts) es el germen: en Fase 1 se
-  convierte en `packages/engine/test/*.test.ts` con los mismos casos de paridad.
+- **Runner del núcleo: `node:test`** (cero dependencias, corre con
+  `node --experimental-strip-types`, sin install). La suite vive en
+  [`packages/engine/test/*.test.ts`](../packages/engine/test/) y nació del spike de
+  Fase 0 (ya graduado). **Vitest + Testing Library** se adopta en `apps/web` para
+  componentes y a11y (necesita jsdom). `npm test` corre la suite del núcleo.
 - **Cobertura mínima del núcleo (`engine` + `schema`): 90% líneas/ramas.** Es código
   puro: no hay excusa.
 - **Tests de paridad** contra los números reales de Africa/Basque: cada vez que se

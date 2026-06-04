@@ -11,7 +11,7 @@ que consume el viaje como **datos** en vez de tenerlo cableado en el código.
 
 ## Estado
 
-📋 **Planificación + Fase 0 completada** (spike 23/23 OK — `npm run spike`).
+📋 **Fase 0 completada · Fase 1 en marcha** (suite del engine verde — `npm test`).
 
 Documentos del proyecto:
 - [`PRODUCT-ROADMAP.md`](PRODUCT-ROADMAP.md) — análisis, MVP, roadmap por fases, decisiones.
@@ -20,7 +20,10 @@ Documentos del proyecto:
 - [`docs/feature-inventory.md`](docs/feature-inventory.md) — **inventario de preservación**: todo lo de Africa/Basque (estética, temas, a11y, animaciones, integraciones, gotchas) marcado por fase, para no perder nada.
 - [`docs/engineering-standards.md`](docs/engineering-standards.md) — **estándar de calidad / clean code** (núcleo puro, tests ≥90%, a11y como gate, budget de bundle, DoD).
 
-Siguiente: **Fase 1 — engine genérico** (migrar el resto de Africa al schema).
+En curso: **Fase 1 — engine genérico**. Hecho: esqueleto completo de Africa migrado
+al schema (28 fases + 7 forks + secuencia) y motor (sequencer/coste/validación) con
+suite de tests de paridad. Pendiente: contenido editorial, POIs, especies,
+seasonality, add-ons; y el shell `apps/web`.
 
 ## Stack previsto
 

@@ -10,10 +10,12 @@ export interface SequencerState {
   extensions?: Record<string, boolean>;
 }
 
-const isSkip = (optionId: string): boolean => optionId.startsWith("skip_");
-
 export const resolveFork = (fork: Fork, state: SequencerState): string =>
   state.forkChoice?.[fork.id] ?? fork.default;
+
+/** ¿La opción elegida no aporta nada a la ruta? (p.ej. skip_uganda). */
+const isOmitted = (fork: Fork, optionId: string): boolean =>
+  fork.omitWhenSelected?.includes(optionId) ?? false;
 
 /** Lista ordenada de phaseIds activos para una elección dada. */
 export const buildActivePhaseIds = (trip: Trip, state: SequencerState = {}): string[] => {
@@ -25,7 +27,7 @@ export const buildActivePhaseIds = (trip: Trip, state: SequencerState = {}): str
       const fork = trip.forks.find((f) => f.id === item.ref);
       if (!fork) continue;
       const opt = resolveFork(fork, state);
-      if (!isSkip(opt)) out.push(opt);
+      if (!isOmitted(fork, opt)) out.push(opt);
     } else {
       // extensionGroup
       for (const id of item.members) {
@@ -44,22 +46,37 @@ export const recommendForFork = (fork: Fork, budget: string, interest: string): 
 };
 
 /**
- * Comprobación de integridad referencial del documento: cada opción de fork y
- * cada ref de la secuencia debe existir como phase (salvo "skip_*"). Devuelve la
- * lista de errores (vacía = OK). El builder de viajes lo usará para validar.
+ * Comprobación de integridad referencial del documento. TODA opción de fork, ref
+ * de secuencia, miembro de extensión y valor de recs debe existir como phase /
+ * opción válida. Devuelve la lista de errores (vacía = OK). El builder de viajes
+ * lo usará para validar antes de persistir.
  */
 export const validateReferences = (trip: Trip): string[] => {
   const errors: string[] = [];
   const phaseIds = new Set(trip.phases.map((p) => p.id));
 
   for (const fork of trip.forks) {
+    const optionSet = new Set(fork.options);
     for (const opt of fork.options) {
-      if (!isSkip(opt) && !phaseIds.has(opt)) {
+      if (!phaseIds.has(opt)) {
         errors.push(`fork "${fork.id}": opción "${opt}" no existe como phase`);
       }
     }
-    if (!fork.options.includes(fork.default)) {
+    if (!optionSet.has(fork.default)) {
       errors.push(`fork "${fork.id}": default "${fork.default}" no está entre las options`);
+    }
+    for (const omitted of fork.omitWhenSelected ?? []) {
+      if (!optionSet.has(omitted)) {
+        errors.push(`fork "${fork.id}": omitWhenSelected "${omitted}" no está entre las options`);
+      }
+    }
+    // Los valores recomendados deben ser opciones válidas del propio fork.
+    for (const [budget, byInterest] of Object.entries(fork.recs ?? {})) {
+      for (const [interest, optId] of Object.entries(byInterest)) {
+        if (!optionSet.has(optId)) {
+          errors.push(`fork "${fork.id}": recs[${budget}][${interest}] = "${optId}" no es una opción`);
+        }
+      }
     }
   }
 
@@ -67,7 +84,7 @@ export const validateReferences = (trip: Trip): string[] => {
     if (item.kind === "fork" && !trip.forks.some((f) => f.id === item.ref)) {
       errors.push(`sequence: fork "${item.ref}" no existe`);
     }
-    if (item.kind === "phase" && !isSkip(item.ref) && !phaseIds.has(item.ref)) {
+    if (item.kind === "phase" && !phaseIds.has(item.ref)) {
       errors.push(`sequence: phase "${item.ref}" no existe`);
     }
     if (item.kind === "extensionGroup") {

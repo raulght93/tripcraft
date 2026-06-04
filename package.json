@@ -12,7 +12,7 @@
     "worker"
   ],
   "scripts": {
-    "spike": "node --experimental-strip-types spike/verify.ts",
+    "test": "node --experimental-strip-types --test \"packages/**/test/*.test.ts\"",
     "typecheck": "tsc -b packages/schema packages/engine"
   },
   "engines": {
