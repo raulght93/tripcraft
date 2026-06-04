@@ -40,11 +40,16 @@ test("el fork Costa Kenia muestra sus opciones con coste por el engine", async (
   expect(screen.getAllByText(/€/).length).toBeGreaterThan(0);
 });
 
-test("una fase fija muestra coste calculado, banner de temporada y POIs", async () => {
+test("una fase fija muestra hero, coste, datos prácticos, temporada y POIs", async () => {
   await renderApp();
   fireEvent.click(screen.getByRole("tab", { name: /Safari Kenya/ }));
   expect(screen.getByText(/3050|3\.050/)).toBeInTheDocument(); // 13·230 + 60
   expect(screen.getByText(/Temporada óptima/)).toBeInTheDocument(); // Track B+D
+  // Profundidad editorial nueva: hero (con alt) + datos prácticos.
+  expect(screen.getByRole("img", { name: /Safari Kenya/ })).toBeInTheDocument();
+  expect(screen.getByText(/Datos prácticos/)).toBeInTheDocument();
+  expect(screen.getByText(/Visado/)).toBeInTheDocument();
+  // POIs migrados.
   expect(screen.getAllByText(/Nairobi/).length).toBeGreaterThan(0);
   expect(screen.getByText(/Maasai Mara NR/)).toBeInTheDocument();
 });

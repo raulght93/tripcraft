@@ -46,13 +46,80 @@ export const AFRICA_TRIP = {
 
   phases: [
     // ── Costa Kenia (fork) ──
-    { id: "watamu", title: "Watamu balance", country: "KE", daysBase: 25, daysMin: 14, daysMax: 35, dailyCost: cost(36, 75, 145), fixedCost: cost(0, 0, 0), interests: ["dive", "nature"] },
-    { id: "lamu", title: "Lamu UNESCO", country: "KE", daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: cost(32, 72, 145), fixedCost: cost(130, 220, 420), interests: ["culture", "foodie"] },
-    { id: "diani", title: "Diani turismo + kitesurf", country: "KE", daysBase: 22, daysMin: 14, daysMax: 32, dailyCost: cost(38, 80, 170), fixedCost: cost(40, 60, 100), interests: ["adventure", "nature"] },
+    {
+      id: "watamu", title: "Watamu balance", country: "KE",
+      daysBase: 25, daysMin: 14, daysMax: 35, dailyCost: cost(36, 75, 145), fixedCost: cost(0, 0, 0),
+      interests: ["dive", "nature"],
+      hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Watamu_Beach%2C_Kenya.JPG/500px-Watamu_Beach%2C_Kenya.JPG",
+      climateWarning: "🌧️ Lluvias cortas de noviembre: la costa keniata tiene lluvias cortas (oct–nov) que normalmente terminan a mediados-finales de noviembre. Las primeras 1–2 semanas pueden tener lluvias de tarde (1–3h); el snorkel y la playa son buenos el resto del día. Hacia diciembre mejora sensiblemente.",
+      info: [
+        { label: "Visado", value: "eTA Kenya $30 + admin (~$39 total). Online 3 días antes." },
+        { label: "Moneda", value: "Shilling (KES) · 1€ ≈ 150 KES" },
+        { label: "Idioma", value: "Suajili (oficial; inglés en turismo)" },
+        { label: "Mejor época", value: "Nov-Mar seco. Abr-May lluvias largas." },
+        { label: "Enchufe", value: "Tipo G (UK), 240V" },
+        { label: "Consejos", value: "~10% propina en restaurantes. Negociad el tuk-tuk." },
+      ],
+    },
+    {
+      id: "lamu", title: "Lamu UNESCO", country: "KE",
+      daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: cost(32, 72, 145), fixedCost: cost(130, 220, 420),
+      interests: ["culture", "foodie"],
+      hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Lamu_Old_Town.jpg/500px-Lamu_Old_Town.jpg",
+      climateWarning: "🌧️ Noviembre es el final de las lluvias cortas en la costa norte. Las primeras semanas pueden tener lluvias diarias de tarde; Lamu es más húmedo que Watamu o Diani por su posición norte. La brisa del océano hace los días calurosos (32°C) llevaderos.",
+      info: [
+        { label: "Visado", value: "eTA Kenya $30 (~$39 con tasas)" },
+        { label: "Moneda", value: "Shilling (KES)" },
+        { label: "Idioma", value: "Suajili predominante. Inglés en hoteles." },
+        { label: "Mejor época", value: "Nov-Feb. Maulidi (marzo-abril, variable)." },
+        { label: "Enchufe", value: "Tipo G (UK), 240V" },
+        { label: "Consejos", value: "Sin coches: solo asnos y dhows. Vestid modestos (zona musulmana practicante)." },
+      ],
+    },
+    {
+      id: "diani", title: "Diani turismo + kitesurf", country: "KE",
+      daysBase: 22, daysMin: 14, daysMax: 32, dailyCost: cost(38, 80, 170), fixedCost: cost(40, 60, 100),
+      interests: ["adventure", "nature"],
+      hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Diani_Beach_Ukunda.jpg/500px-Diani_Beach_Ukunda.jpg",
+      info: [
+        { label: "Visado", value: "eTA Kenya $30 (~$39 con tasas)" },
+        { label: "Moneda", value: "Shilling (KES)" },
+        { label: "Idioma", value: "Suajili (inglés en turismo)" },
+        { label: "Mejor época", value: "Dic-Mar y Jun-Sep para kitesurf." },
+        { label: "Enchufe", value: "Tipo G (UK), 240V" },
+        { label: "Consejos", value: "Resorts negociables fuera de temporada. Tuk-tuk barato dentro de Diani." },
+      ],
+    },
 
     // ── Fijas tras Costa Kenia ──
-    { id: "safari-ke", title: "Safari Kenya (Masái Mara)", country: "KE", daysBase: 13, daysMin: 8, daysMax: 18, dailyCost: cost(125, 230, 400), fixedCost: cost(40, 60, 100), interests: ["safari", "nature"] },
-    { id: "mafia", title: "Mafia · Costa Tanzania", country: "TZ", daysBase: 23, daysMin: 14, daysMax: 30, dailyCost: cost(55, 100, 175), fixedCost: cost(120, 145, 180), interests: ["dive", "nature"] },
+    {
+      id: "safari-ke", title: "Safari Kenya (Masái Mara)", country: "KE",
+      daysBase: 13, daysMin: 8, daysMax: 18, dailyCost: cost(125, 230, 400), fixedCost: cost(40, 60, 100),
+      interests: ["safari", "nature"],
+      hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Masai_Mara_at_Sunset.jpg/500px-Masai_Mara_at_Sunset.jpg",
+      info: [
+        { label: "Visado", value: "eTA Kenya $30 (~$39 con tasas)" },
+        { label: "Moneda", value: "Shilling (KES)" },
+        { label: "Idioma", value: "Suajili + maa (maasai); inglés con guías" },
+        { label: "Mejor época", value: "Dic-Feb seco (verde), Jul-Oct migración." },
+        { label: "Enchufe", value: "Tipo G (UK), 240V" },
+        { label: "Consejos", value: "Tasas del parque Mara: $80/día. Llevad USD cash, casi todo se paga así." },
+      ],
+    },
+    {
+      id: "mafia", title: "Mafia · Costa Tanzania", country: "TZ",
+      daysBase: 23, daysMin: 14, daysMax: 30, dailyCost: cost(55, 100, 175), fixedCost: cost(120, 145, 180),
+      interests: ["dive", "nature"],
+      hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Mafia_Island_%2851554991378%29.jpg/500px-Mafia_Island_%2851554991378%29.jpg",
+      info: [
+        { label: "Visado", value: "eVisa Tanzania $50 online" },
+        { label: "Moneda", value: "Shilling tanzano (TZS) · 1€ ≈ 3.000 TZS" },
+        { label: "Idioma", value: "Suajili + inglés" },
+        { label: "Mejor época", value: "Oct-Mar (tiburón ballena Oct-Mar, pico dic-ene)." },
+        { label: "Enchufe", value: "Tipo D/G, 230V" },
+        { label: "Consejos", value: "Mafia está separada de Zanzíbar. Ferry MV Kilindoni 2-3x/semana, ~20$." },
+      ],
+    },
 
     // ── Uganda / Ruanda (fork opcional) ──
     { id: "uganda", title: "Uganda — Gorilas + Sabana", country: "UG", daysBase: 14, daysMin: 10, daysMax: 20, dailyCost: cost(80, 160, 320), fixedCost: cost(950, 1100, 1350), interests: ["safari", "adventure"] },

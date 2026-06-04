@@ -52,16 +52,35 @@ export function ForkView({ forkId }) {
                 color: colors.text,
                 cursor: "pointer",
                 boxShadow: ringId === optId ? shadows.ring : "none",
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
               }}
             >
-              <div style={{ fontWeight: 600 }}>
-                {phase?.title ?? optId} {isChosen ? "✓" : ""}
-              </div>
-              <div style={{ fontSize: 13, color: colors.muted }}>
-                {isSkip
-                  ? "El viaje sigue de largo"
-                  : `≈ ${fmtEUR(cost)} · ${phase?.daysBase ?? 0} días`}
-              </div>
+              {phase?.hero ? (
+                <img
+                  src={phase.hero}
+                  alt=""
+                  loading="lazy"
+                  style={{
+                    width: 72,
+                    height: 54,
+                    objectFit: "cover",
+                    borderRadius: radii.sm,
+                    flexShrink: 0,
+                  }}
+                />
+              ) : null}
+              <span style={{ flex: 1 }}>
+                <span style={{ display: "block", fontWeight: 600 }}>
+                  {phase?.title ?? optId} {isChosen ? "✓" : ""}
+                </span>
+                <span style={{ display: "block", fontSize: 13, color: colors.muted }}>
+                  {isSkip
+                    ? "El viaje sigue de largo"
+                    : `≈ ${fmtEUR(cost)} · ${phase?.daysBase ?? 0} días`}
+                </span>
+              </span>
             </button>
           );
         })}

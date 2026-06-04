@@ -31,6 +31,8 @@ export const PhaseSchema = v.object({
   interests: v.optional(v.array(v.string())),
   hero: v.optional(v.string()),
   slides: v.optional(v.array(v.string())),
+  /** Datos prácticos autodescriptivos (label→value), p.ej. Visado / Moneda / Enchufe. */
+  info: v.optional(v.array(v.object({ label: v.string(), value: v.string() }))),
   climateWarning: v.optional(v.nullable(v.string())),
   safetyNote: v.optional(v.nullable(v.string())),
 });
