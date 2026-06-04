@@ -1,0 +1,11 @@
+{
+  "name": "@tripcraft/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SPA (Vite + React). STUB — se materializa en la Fase 1 portando el orquestador de Africa a un shell genérico data-driven.",
+  "dependencies": {
+    "@tripcraft/engine": "workspace:*",
+    "@tripcraft/schema": "workspace:*"
+  }
+}

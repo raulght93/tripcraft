@@ -109,18 +109,28 @@
 | `useTripState.defaultForkChoice` | `forks[].default` |
 | `costs.js` 1.7x hardcoded | `meta.costMultiplierRule` |
 
-## Criterios de éxito del spike
+## Criterios de éxito del spike — ✅ COMPLETADO (2026-06-04)
 
-- [ ] `watamu` (+ su fork `fork_costa_ke`) se expresa entero en el schema.
-- [ ] Un sequencer genérico produce la misma lista de fases activas que el
-      `ACTIVE_PHASES` actual para un `forkChoice` dado.
-- [ ] `phaseCost()` da el mismo número leyendo del schema que leyendo de `phaseMeta.js`.
-- [ ] Ninguna parte del engine referencia un ID literal de Africa.
+Ejecutable: `npm run spike` (Node ≥22.6, sin instalar nada). **23/23 OK.**
+Código: [`spike/verify.ts`](../spike/verify.ts) · datos: [`trips/africa/src/index.js`](../trips/africa/src/index.js)
+· motor: [`packages/engine/src/`](../packages/engine/src/).
 
-## Preguntas abiertas que el spike debe responder
+- [x] `watamu` (+ su fork `fork_costa_ke` y la fase fija `safari-ke`) se expresa
+      entero en el schema, con números EXACTOS portados de `phaseMeta.js`.
+- [x] Un sequencer genérico (`buildActivePhaseIds`) produce la misma lista de fases
+      activas que `ACTIVE_PHASES` para cualquier `forkChoice` (default, lamu, diani).
+- [x] `phaseCost()` da el mismo número que la fórmula de `utils/costs.js` en 8 casos
+      (activos, descanso al 0.5, voluntariado al 0.5 fijo, multiplicador 1.7× de viajeros).
+- [x] El engine no referencia ningún ID literal de Africa: se prueba con un segundo
+      viaje `DEMO` (otros tiers, sin forks, otros ids) y con detección de un doc roto.
 
-1. ¿Los `extensionGroup` reordenables (infra #30 de Africa) encajan en `sequence`
-   o necesitan su propia estructura?
-2. ¿`companions` (la vista de acompañantes) es parte del Trip Schema o un
-   plugin/módulo aparte? (Es muy específico; candidato a feature opcional.)
-3. ¿TS para `schema` + `engine`? (Decisión §6 del roadmap.)
+## Preguntas abiertas — estado tras el spike
+
+1. **`extensionGroup` reordenables** → ✅ resuelto: encajan en `sequence` como un
+   item `{ kind: "extensionGroup", members[], reorderable }`. El sequencer ya los
+   recorre y `validateReferences` valida sus miembros. (El reorden en sí lo aplicará
+   la UI mutando el array `members`.)
+2. **`companions`** → ⏳ sigue abierto. Es muy específico de un viaje; candidato a
+   **feature opcional / módulo aparte**, no parte del núcleo del schema. Decidir en Fase 1.
+3. **TS para `schema` + `engine`** → ✅ decidido: sí. `schema` usa Valibot (tipos +
+   validación de una fuente); `engine` es TS sin dependencias; `trips/*` siguen en JS.

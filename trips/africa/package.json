@@ -1,0 +1,11 @@
+{
+  "name": "@tripcraft/trip-africa",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Plantilla de viaje: África Oriental, Austral y Norte (migración parcial, spike).",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  }
+}

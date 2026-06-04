@@ -1,0 +1,10 @@
+{
+  "name": "@tripcraft/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker: API de 'mis viajes' (D1) + auth ligera. STUB — Fase 2.",
+  "dependencies": {
+    "@tripcraft/schema": "workspace:*"
+  }
+}
