@@ -1,4 +1,4 @@
-import { buildActivePhaseIds } from "@tripcraft/engine";
+import { buildActivePhaseIds, computeItinerary, itineraryByPhase } from "@tripcraft/engine";
 import { validateTrip } from "@tripcraft/schema";
 import { AFRICA_TRIP } from "@tripcraft/trip-africa";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
@@ -38,6 +38,9 @@ export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
   const [tier, setTierState] = useState(() =>
     loadLS(lsKey(trip.id, "tier"), trip.tiers[Math.min(1, trip.tiers.length - 1)]),
   );
+  const [startDate, setStartDateState] = useState(() =>
+    loadLS(lsKey(trip.id, "start"), trip.meta.dateWindowDefault?.start ?? "2026-01-01"),
+  );
 
   const pickFork = useCallback(
     (forkId, optionId) =>
@@ -55,6 +58,13 @@ export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
     },
     [trip.id],
   );
+  const setStartDate = useCallback(
+    (d) => {
+      setStartDateState(d);
+      saveLS(lsKey(trip.id, "start"), d);
+    },
+    [trip.id],
+  );
 
   const activePhaseIds = useMemo(
     () => buildActivePhaseIds(trip, { forkChoice }),
@@ -62,9 +72,40 @@ export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
   );
   const phaseById = useMemo(() => Object.fromEntries(trip.phases.map((p) => [p.id, p])), [trip]);
 
+  // Capa de fechas: tramos datados derivados de la fecha de inicio + ruta activa.
+  const itinerary = useMemo(
+    () => computeItinerary(trip, startDate, activePhaseIds),
+    [trip, startDate, activePhaseIds],
+  );
+  const legByPhase = useMemo(() => itineraryByPhase(itinerary), [itinerary]);
+
   const value = useMemo(
-    () => ({ trip, forkChoice, pickFork, tier, setTier, activePhaseIds, phaseById }),
-    [trip, forkChoice, pickFork, tier, setTier, activePhaseIds, phaseById],
+    () => ({
+      trip,
+      forkChoice,
+      pickFork,
+      tier,
+      setTier,
+      startDate,
+      setStartDate,
+      activePhaseIds,
+      phaseById,
+      itinerary,
+      legByPhase,
+    }),
+    [
+      trip,
+      forkChoice,
+      pickFork,
+      tier,
+      setTier,
+      startDate,
+      setStartDate,
+      activePhaseIds,
+      phaseById,
+      itinerary,
+      legByPhase,
+    ],
   );
 
   return <TripCtx.Provider value={value}>{children}</TripCtx.Provider>;

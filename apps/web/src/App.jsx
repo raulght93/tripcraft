@@ -3,13 +3,14 @@ import { ForkView } from "./components/ForkView.jsx";
 import { Header } from "./components/Header.jsx";
 import { PhaseView } from "./components/PhaseView.jsx";
 import { TabBar } from "./components/TabBar.jsx";
+import { Timeline } from "./components/Timeline.jsx";
 import { useTheme } from "./hooks/useTheme.js";
 import { buildTabs } from "./lib/tabs.js";
 import { colors, fonts } from "./styles/tokens.js";
 import { useTrip } from "./trip/TripContext.jsx";
 
 function ExtensionsView({ members }) {
-  const { trip, tier, phaseById } = useTrip();
+  const { phaseById } = useTrip();
   return (
     <section style={{ padding: 20, fontFamily: fonts.sans, color: colors.text }}>
       <h2 style={{ fontFamily: fonts.serif, fontSize: 28, margin: "0 0 16px" }}>Extensiones</h2>
@@ -24,10 +25,12 @@ function ExtensionsView({ members }) {
   );
 }
 
+const META_TABS = [{ id: "itinerary", kind: "meta", label: "Itinerario", icon: "📅" }];
+
 export function App() {
   const { trip } = useTrip();
   const { theme, cycleTheme } = useTheme();
-  const tabs = useMemo(() => buildTabs(trip), [trip]);
+  const tabs = useMemo(() => [...META_TABS, ...buildTabs(trip)], [trip]);
   const [activeTab, setActiveTab] = useState(() => tabs[0]?.id);
 
   const active = tabs.find((t) => t.id === activeTab) ?? tabs[0];
@@ -37,6 +40,7 @@ export function App() {
       <Header theme={theme} onCycleTheme={cycleTheme} />
       <TabBar tabs={tabs} activeTab={active?.id} onSelect={setActiveTab} />
       <main id="main">
+        {active?.kind === "meta" ? <Timeline onSelectPhase={setActiveTab} /> : null}
         {active?.kind === "fork" ? <ForkView forkId={active.id} /> : null}
         {active?.kind === "phase" ? <PhaseView phaseId={active.id} /> : null}
         {active?.kind === "ext" ? <ExtensionsView members={active.members ?? []} /> : null}

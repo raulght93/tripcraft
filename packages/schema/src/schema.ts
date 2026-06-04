@@ -85,6 +85,16 @@ export const PhaseSeasonalitySchema = v.object({
   events: v.optional(v.array(SeasonEventSchema)),
 });
 
+export const PoiSchema = v.object({
+  name: v.string(),
+  lat: v.number(),
+  lng: v.number(),
+  /** "city"|"beach"|"park"|"dive"|"ruin"|"island"|"lodge"|"viewpoint"|"town"|"airport" */
+  type: v.string(),
+  desc: v.optional(v.string()),
+  img: v.optional(v.string()),
+});
+
 export const CostMultiplierRuleSchema = v.object({
   type: v.string(),
   /** nº de viajeros (string) → factor sobre el subtotal por persona. */
@@ -112,6 +122,7 @@ export const TripSchema = v.object({
   sequence: v.array(SequenceItemSchema),
   addons: v.optional(v.record(v.string(), v.array(AddonSchema))),
   seasonality: v.optional(v.record(v.string(), PhaseSeasonalitySchema)),
+  pois: v.optional(v.record(v.string(), v.array(PoiSchema))),
 });
 
 // ── Tipos derivados (fuente única) ────────────────────────────────────────────
@@ -123,6 +134,7 @@ export type Addon = v.InferOutput<typeof AddonSchema>;
 export type CostMultiplierRule = v.InferOutput<typeof CostMultiplierRuleSchema>;
 export type PhaseSeasonality = v.InferOutput<typeof PhaseSeasonalitySchema>;
 export type SeasonEvent = v.InferOutput<typeof SeasonEventSchema>;
+export type Poi = v.InferOutput<typeof PoiSchema>;
 export type ForkRecs = NonNullable<Fork["recs"]>;
 export type Country = v.InferOutput<typeof Country>;
 

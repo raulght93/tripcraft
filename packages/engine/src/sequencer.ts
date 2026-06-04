@@ -77,6 +77,14 @@ export const validateReferences = (trip: Trip): string[] => {
     }
   }
 
+  // El contenido keyed por fase (add-ons, estacionalidad, POIs) debe referenciar
+  // fases existentes — una clave huérfana es contenido que nunca se mostraría.
+  for (const block of ["addons", "seasonality", "pois"] as const) {
+    for (const key of Object.keys(trip[block] ?? {})) {
+      if (!phaseIds.has(key)) errors.push(`${block}: clave "${key}" no es una phase`);
+    }
+  }
+
   for (const fork of trip.forks) {
     const optionSet = new Set(fork.options);
     for (const opt of fork.options) {

@@ -9,6 +9,14 @@ export interface DateRange {
 
 const toDate = (d: string | Date): Date => (d instanceof Date ? d : new Date(d));
 
+/** "2026-11-10" + n días → "YYYY-MM-DD" (aritmética en UTC, estable). */
+export const addDaysISO = (iso: string, n: number): string => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return iso;
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+
 /** Construye una fecha desde `year` + "MM-DD". null si está mal formada. */
 export const buildDate = (year: number, md: string): Date | null => {
   if (!md) return null;

@@ -92,6 +92,18 @@ test("AFRICA_TRIP pasa la integridad referencial", () => {
   assert.deepEqual(validateReferences(T), []);
 });
 
+test("validateReferences detecta clave de contenido huérfana (pois de fase inexistente)", () => {
+  const broken = {
+    ...AFRICA_TRIP,
+    pois: { atlantis: [{ name: "X", lat: 0, lng: 0, type: "city" }] },
+  };
+  const errors = validateReferences(broken as never);
+  assert.ok(
+    errors.some((e) => /pois: clave "atlantis"/.test(e)),
+    errors.join("; "),
+  );
+});
+
 test("validateReferences detecta tier faltante en un add-on (anti-NaN)", () => {
   const broken = {
     ...AFRICA_TRIP,

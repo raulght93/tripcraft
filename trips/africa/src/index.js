@@ -286,6 +286,68 @@ export const AFRICA_TRIP = {
     },
   },
 
+  // Puntos de interés por fase (migración parcial: fases de entrada KE/TZ).
+  // Migrado verbatim de phaseLocations.js. type ∈ city|beach|park|dive|ruin|
+  // island|lodge|viewpoint|town|airport. img: Wikimedia 500px (regla del inventario).
+  // PENDIENTE: resto de fases (~120 POIs) en incrementos siguientes.
+  pois: {
+    watamu: [
+      { name: "Mombasa", lat: -4.043, lng: 39.668, type: "city", desc: "Hub de la costa · llegada por tren desde NBO. Fort Jesus, Old Town, Nyali Beach.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Mombasa_Island.jpg/500px-Mombasa_Island.jpg" },
+      { name: "Watamu", lat: -3.357, lng: 40.022, type: "town", desc: "Base principal · pueblo costero.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Watamu_Beach%2C_Kenya.JPG/500px-Watamu_Beach%2C_Kenya.JPG" },
+      { name: "Watamu Marine NP", lat: -3.38, lng: 40.02, type: "park", desc: "Reserva marina · snorkel + delfines." },
+      { name: "Mida Creek", lat: -3.345, lng: 39.974, type: "viewpoint", desc: "Manglares · kayak + cangrejos al atardecer." },
+      { name: "Malindi", lat: -3.218, lng: 40.117, type: "city", desc: "Ciudad histórica · cabotaje, mercado.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Pillar_of_Vasco_da_Gama.jpg/500px-Pillar_of_Vasco_da_Gama.jpg" },
+      { name: "Gede Ruins", lat: -3.31, lng: 40.02, type: "ruin", desc: "Ciudad swahili abandonada s. XIII.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Great_Mosque_of_Gede.jpg/500px-Great_Mosque_of_Gede.jpg" },
+      { name: "Arabuko-Sokoke", lat: -3.33, lng: 39.88, type: "park", desc: "Bosque costero · monos colobos, aves endémicas." },
+      { name: "Marafa Hell's Kitchen", lat: -3.044, lng: 39.946, type: "viewpoint", desc: "Cañón de arenisca · paseo al atardecer." },
+      { name: "Watamu Turtle Watch", lat: -3.35, lng: 40.025, type: "park", desc: "Local Ocean Conservation · ver tortugas anidando." },
+    ],
+    lamu: [
+      { name: "Lamu Old Town", lat: -2.269, lng: 40.902, type: "city", desc: "UNESCO s. XIV · callejuelas sin coches, casas con puertas talladas, mezquita Riyadha.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Lamu_Old_Town.jpg/500px-Lamu_Old_Town.jpg" },
+      { name: "Shela Beach", lat: -2.31, lng: 40.925, type: "beach", desc: "Playa larga blanca · 12 km." },
+      { name: "Manda Island", lat: -2.25, lng: 40.91, type: "island", desc: "Aeropuerto + ruinas de Takwa.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/TakwaArch.jpg/500px-TakwaArch.jpg" },
+      { name: "Kizingo (sur Lamu)", lat: -2.38, lng: 40.91, type: "lodge", desc: "Eco-lodge remoto · vacío total." },
+      { name: "Manda Airport", lat: -2.252, lng: 40.913, type: "airport", desc: "Llegada desde Wilson NBO." },
+      { name: "Pate Island", lat: -2.1, lng: 41.05, type: "island", desc: "Norte del archipiélago · ruinas medievales remotas.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Pate_town_narrow_streets.jpg/500px-Pate_town_narrow_streets.jpg" },
+      { name: "Matondoni village", lat: -2.235, lng: 40.83, type: "town", desc: "Pueblo constructor de dhows · taller artesanal." },
+    ],
+    diani: [
+      { name: "Ukunda / Mombasa", lat: -4.22, lng: 39.57, type: "city", desc: "Llegada por Moi Intl Airport (MBA). Ferry a Likoni." },
+      { name: "Diani Beach", lat: -4.31, lng: 39.575, type: "beach", desc: "Playa #1 de África · 17 km de arena blanca.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Diani_Beach_Ukunda.jpg/500px-Diani_Beach_Ukunda.jpg" },
+      { name: "Kongo River mouth", lat: -4.247, lng: 39.582, type: "viewpoint", desc: "Estuario norte · jet ski + kitesurf." },
+      { name: "Galu Beach", lat: -4.385, lng: 39.555, type: "beach", desc: "Extremo sur · más tranquilo." },
+      { name: "Shimba Hills NR", lat: -4.23, lng: 39.42, type: "park", desc: "Reserva colina · elefantes + sable antelope.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Elephants_at_shimba.jpg/500px-Elephants_at_shimba.jpg" },
+      { name: "Wasini Island", lat: -4.66, lng: 39.385, type: "dive", desc: "Day trip · snorkel con delfines.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Shimoni_%26_Wasini.jpg/500px-Shimoni_%26_Wasini.jpg" },
+      { name: "Funzi Island", lat: -4.567, lng: 39.42, type: "island", desc: "Day trip al sur · cocodrilos del estuario." },
+      { name: "Mwaluganje Sanctuary", lat: -4.26, lng: 39.38, type: "park", desc: "Santuario comunitario de elefantes." },
+    ],
+    "safari-ke": [
+      { name: "Nairobi", lat: -1.286, lng: 36.817, type: "city", desc: "Hub de llegada · 1-2 días aclimatación.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Nairobi_skyline_from_Gem_Hotel.jpg/500px-Nairobi_skyline_from_Gem_Hotel.jpg" },
+      { name: "Wilson Airport", lat: -1.322, lng: 36.814, type: "airport", desc: "Vuelos charter a Mara, Amboseli, Samburu (~45 min)." },
+      { name: "Nairobi NP", lat: -1.37, lng: 36.85, type: "park", desc: "Safaris con skyline de fondo · leones, rinocerontes.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Lions_of_Kenya_02.jpg/500px-Lions_of_Kenya_02.jpg" },
+      { name: "Maasai Mara NR", lat: -1.527, lng: 35.144, type: "park", desc: "La gran reserva · big 5 + migración (jul-oct).", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Masai_Mara_at_Sunset.jpg/500px-Masai_Mara_at_Sunset.jpg" },
+      { name: "Sekenani Gate", lat: -1.523, lng: 35.276, type: "viewpoint", desc: "Entrada principal este." },
+      { name: "Talek River", lat: -1.43, lng: 35.207, type: "lodge", desc: "Concentración de campamentos mid-range." },
+      { name: "Mara Triangle", lat: -1.42, lng: 35, type: "park", desc: "Sector NW · menos turismo, fees aparte." },
+      { name: "Lake Nakuru NP", lat: -0.367, lng: 36.083, type: "park", desc: "Flamencos + rinocerontes blancos.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Lake-Nakuru-Baboon-Hill-View.JPG/500px-Lake-Nakuru-Baboon-Hill-View.JPG" },
+      { name: "Amboseli NP", lat: -2.652, lng: 37.26, type: "park", desc: "Vista del Kilimanjaro + elefantes." },
+      { name: "Samburu NR", lat: 0.575, lng: 37.49, type: "park", desc: "Norte árido · cebra Grevy, jirafa reticulada, gerenuk.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Samburu_National_Reserve%2C_Kenya-26December2012.jpg/500px-Samburu_National_Reserve%2C_Kenya-26December2012.jpg" },
+      { name: "Tsavo East NP", lat: -2.55, lng: 38.5, type: "park", desc: "El mayor de Kenia · elefantes rojos por el polvo." },
+    ],
+    mafia: [
+      { name: "Arusha", lat: -3.387, lng: 36.683, type: "city", desc: "Tránsito desde Kenia · mercado maasai + cafetal.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Arusha_City_view.jpg/500px-Arusha_City_view.jpg" },
+      { name: "Dar es Salaam", lat: -6.792, lng: 39.208, type: "city", desc: "Capital económica · Kariakoo + Kivukoni Fish Market." },
+      { name: "Bagamoyo", lat: -6.443, lng: 38.901, type: "ruin", desc: "Antigua puerta del esclavismo · arquitectura suajili." },
+      { name: "Kilwa Kisiwani", lat: -8.961, lng: 39.516, type: "ruin", desc: "UNESCO · ciudad comercial s. VII-XVI · Gran Mezquita.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Great_Mosque_at_Kilwa.jpg/500px-Great_Mosque_at_Kilwa.jpg" },
+      { name: "Kilindoni", lat: -7.911, lng: 39.66, type: "town", desc: "Pueblo principal de Mafia + aeropuerto." },
+      { name: "Chole Bay", lat: -7.951, lng: 39.829, type: "dive", desc: "Bahía marina · principal zona de buceo." },
+      { name: "Utende Beach", lat: -7.94, lng: 39.84, type: "beach", desc: "Playa de los lodges premium." },
+      { name: "Mafia Island Marine Park", lat: -7.95, lng: 39.83, type: "park", desc: "Tiburones ballena oct-feb.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Mafia_Island_%2851554991378%29.jpg/500px-Mafia_Island_%2851554991378%29.jpg" },
+      { name: "Juani Island", lat: -8, lng: 39.86, type: "island", desc: "Tortugas verdes + ruinas." },
+      { name: "Kua Ruins", lat: -8.024, lng: 39.872, type: "ruin", desc: "Ruinas de la ciudad swahili abandonada s. XVIII en Juani." },
+    ],
+  },
+
   // Equivalente a ACTIVE_PHASES de useTripState.js (orden literal des-hardcodeado).
   sequence: [
     { kind: "fork", ref: "fork_costa_ke" },

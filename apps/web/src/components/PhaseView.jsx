@@ -1,16 +1,31 @@
-import { displayFlag, monthNames, phaseCost } from "@tripcraft/engine";
+import { displayFlag, phaseCost, poisFor } from "@tripcraft/engine";
 import { colors, fonts, radii } from "../styles/tokens.js";
 import { useTrip } from "../trip/TripContext.jsx";
+import { SeasonBanner } from "./SeasonBanner.jsx";
 
 const fmtEUR = (n) => `${Math.round(n).toLocaleString("es-ES")} €`;
 
+const POI_ICON = {
+  city: "🏙️",
+  beach: "🏖️",
+  park: "🌿",
+  dive: "🤿",
+  ruin: "🏛️",
+  island: "🏝️",
+  lodge: "🏕️",
+  viewpoint: "📸",
+  town: "🏘️",
+  airport: "✈️",
+};
+
 export function PhaseView({ phaseId }) {
-  const { trip, tier, phaseById } = useTrip();
+  const { trip, tier, phaseById, legByPhase } = useTrip();
   const phase = phaseById[phaseId];
   if (!phase) return null;
 
-  const cost = phaseCost(trip, phaseId, phase.daysBase, tier);
-  const season = trip.seasonality?.[phaseId];
+  const days = legByPhase[phaseId]?.days || phase.daysBase;
+  const cost = phaseCost(trip, phaseId, days, tier);
+  const pois = poisFor(trip, phaseId);
 
   return (
     <section
@@ -24,7 +39,7 @@ export function PhaseView({ phaseId }) {
         <span aria-hidden="true">{displayFlag(phase)}</span> {phase.title}
       </h2>
       <p style={{ color: colors.muted, margin: "0 0 16px" }}>
-        {phase.daysBase} días sugeridos · {phase.daysMin}–{phase.daysMax} ajustable
+        {days} días · {phase.daysMin}–{phase.daysMax} ajustable
       </p>
 
       <div
@@ -37,21 +52,41 @@ export function PhaseView({ phaseId }) {
         }}
       >
         <div style={{ fontSize: 13, color: colors.muted }}>
-          Coste estimado ({phase.daysBase} días, nivel {tier})
+          Coste estimado ({days} días, nivel {tier})
         </div>
         <div style={{ fontSize: 26, fontFamily: fonts.serif, color: colors.accent }}>
           {fmtEUR(cost)}
         </div>
       </div>
 
-      {season ? (
-        <p style={{ marginTop: 16, color: colors.muted }}>
-          🗓️ Mejor temporada:{" "}
-          <strong style={{ color: colors.text }}>{monthNames(season.optimal)}</strong>
-          {season.avoid
-            ? ` · evitar ${monthNames(season.avoid.months)} (${season.avoid.reason})`
-            : ""}
-        </p>
+      <SeasonBanner phaseId={phaseId} />
+
+      {pois.length > 0 ? (
+        <>
+          <h3 style={{ fontFamily: fonts.serif, fontSize: 20, margin: "24px 0 8px" }}>
+            Qué ver ({pois.length})
+          </h3>
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
+            {pois.map((poi) => (
+              <li
+                key={poi.name}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: radii.md,
+                  border: `1px solid ${colors.border}`,
+                  background: colors.surface,
+                }}
+              >
+                <div style={{ fontWeight: 600 }}>
+                  <span aria-hidden="true">{POI_ICON[poi.type] ?? "📍"}</span> {poi.name}
+                </div>
+                {poi.desc ? (
+                  <div style={{ fontSize: 13, color: colors.muted }}>{poi.desc}</div>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </>
       ) : null}
     </section>
   );
