@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ForkView } from "./components/ForkView.jsx";
 import { Header } from "./components/Header.jsx";
 import { PhaseView } from "./components/PhaseView.jsx";
+import { SpeciesPanel } from "./components/SpeciesPanel.jsx";
 import { TabBar } from "./components/TabBar.jsx";
 import { Timeline } from "./components/Timeline.jsx";
 import { useTheme } from "./hooks/useTheme.js";
@@ -25,7 +26,10 @@ function ExtensionsView({ members }) {
   );
 }
 
-const META_TABS = [{ id: "itinerary", kind: "meta", label: "Itinerario", icon: "📅" }];
+const META_TABS = [
+  { id: "itinerary", kind: "meta", label: "Itinerario", icon: "📅" },
+  { id: "species", kind: "meta", label: "Fauna", icon: "🦁" },
+];
 
 export function App() {
   const { trip } = useTrip();
@@ -40,9 +44,12 @@ export function App() {
       <Header theme={theme} onCycleTheme={cycleTheme} />
       <TabBar tabs={tabs} activeTab={active?.id} onSelect={setActiveTab} />
       <main id="main">
-        {active?.kind === "meta" ? <Timeline onSelectPhase={setActiveTab} /> : null}
-        {active?.kind === "fork" ? <ForkView forkId={active.id} /> : null}
-        {active?.kind === "phase" ? <PhaseView phaseId={active.id} /> : null}
+        {active?.id === "itinerary" ? <Timeline onSelectPhase={setActiveTab} /> : null}
+        {active?.id === "species" ? <SpeciesPanel /> : null}
+        {active?.kind === "fork" ? <ForkView forkId={active.id} onNavigate={setActiveTab} /> : null}
+        {active?.kind === "phase" ? (
+          <PhaseView phaseId={active.id} onNavigate={setActiveTab} />
+        ) : null}
         {active?.kind === "ext" ? <ExtensionsView members={active.members ?? []} /> : null}
       </main>
     </div>

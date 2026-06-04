@@ -9,6 +9,7 @@ import {
   computeItinerary,
   itineraryByPhase,
   poisFor,
+  speciesForPhase,
 } from "../src/index.ts";
 
 const T = AFRICA_TRIP as never;
@@ -57,4 +58,13 @@ test("itineraryByPhase indexa los tramos por phaseId", () => {
 
 test("addonsFor devuelve [] cuando la fase no declara add-ons", () => {
   assert.deepEqual(addonsFor(T, "watamu"), []);
+});
+
+test("speciesForPhase filtra el catálogo por fase", () => {
+  const safariKe = speciesForPhase(T, "safari-ke").map((s) => s.id);
+  assert.ok(safariKe.includes("lion"));
+  assert.ok(safariKe.includes("wildebeest"));
+  assert.ok(!safariKe.includes("whale-shark")); // marino, no en safari-ke
+  assert.equal(speciesForPhase(T, "mafia")[0]?.id, "whale-shark");
+  assert.deepEqual(speciesForPhase(T, "skip_f1"), []);
 });

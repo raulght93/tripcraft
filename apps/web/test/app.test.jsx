@@ -67,6 +67,22 @@ test("elegir una opción de fork muestra su detalle completo (avisos de segurida
   expect(screen.getByText(/criminalidad más altas del mundo/)).toBeInTheDocument();
 });
 
+test("el tab Fauna lista el catálogo de especies con filtro por tipo", async () => {
+  await renderApp();
+  fireEvent.click(screen.getByRole("tab", { name: /Fauna/ }));
+  expect(screen.getByText(/Fauna y flora/)).toBeInTheDocument();
+  expect(screen.getByText(/León africano/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /Mamíferos/ })).toBeInTheDocument();
+});
+
+test("cross-link: desde una fase, 'Ver catálogo' navega a Fauna", async () => {
+  await renderApp();
+  fireEvent.click(screen.getByRole("tab", { name: /Safari Kenya/ }));
+  expect(screen.getByText(/Fauna que verás/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /Ver catálogo/ }));
+  expect(screen.getByText(/Fauna y flora/)).toBeInTheDocument(); // ya en el catálogo
+});
+
 test("el shell no tiene violaciones de accesibilidad (axe)", async () => {
   const { container } = await renderApp();
   expect(await axe(container)).toHaveNoViolations();

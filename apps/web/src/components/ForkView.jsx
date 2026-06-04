@@ -6,7 +6,7 @@ import { PhaseView } from "./PhaseView.jsx";
 
 const fmtEUR = (n) => `${Math.round(n).toLocaleString("es-ES")} €`;
 
-export function ForkView({ forkId }) {
+export function ForkView({ forkId, onNavigate }) {
   const { trip, forkChoice, pickFork, tier, phaseById } = useTrip();
   const [ringId, setRingId] = useState(null);
   const fork = trip.forks.find((f) => f.id === forkId);
@@ -92,7 +92,7 @@ export function ForkView({ forkId }) {
         <p style={{ marginTop: 20, color: colors.muted }}>El viaje continúa sin esta parada.</p>
       ) : (
         <div style={{ marginTop: 24, borderTop: `1px solid ${colors.border}` }}>
-          <PhaseView phaseId={chosen} />
+          <PhaseView phaseId={chosen} onNavigate={onNavigate} />
         </div>
       )}
     </section>

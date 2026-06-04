@@ -84,6 +84,12 @@ export const validateReferences = (trip: Trip): string[] => {
       if (!phaseIds.has(key)) errors.push(`${block}: clave "${key}" no es una phase`);
     }
   }
+  // Cada especie debe referenciar fases existentes.
+  for (const s of trip.species ?? []) {
+    for (const ph of s.phases) {
+      if (!phaseIds.has(ph)) errors.push(`species "${s.id}": fase "${ph}" no existe`);
+    }
+  }
 
   for (const fork of trip.forks) {
     const optionSet = new Set(fork.options);

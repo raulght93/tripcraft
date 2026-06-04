@@ -109,6 +109,20 @@ export const PoiSchema = v.object({
   img: v.optional(v.string()),
 });
 
+export const SpeciesSchema = v.object({
+  id: v.string(),
+  name: v.string(),
+  scientific: v.optional(v.string()),
+  /** "mammal"|"primate"|"bird"|"marine"|"reptile"|"plant"|"gorilla" */
+  kind: v.string(),
+  img: v.optional(v.string()),
+  desc: v.optional(v.string()),
+  /** phaseIds donde se puede ver. */
+  phases: v.array(v.string()),
+  /** "safari"|"snorkel"|"diving"|"boat"|"trekking"|"birding" */
+  activities: v.optional(v.array(v.string())),
+});
+
 export const CostMultiplierRuleSchema = v.object({
   type: v.string(),
   /** nº de viajeros (string) → factor sobre el subtotal por persona. */
@@ -137,6 +151,7 @@ export const TripSchema = v.object({
   addons: v.optional(v.record(v.string(), v.array(AddonSchema))),
   seasonality: v.optional(v.record(v.string(), PhaseSeasonalitySchema)),
   pois: v.optional(v.record(v.string(), v.array(PoiSchema))),
+  species: v.optional(v.array(SpeciesSchema)),
 });
 
 /**
@@ -166,6 +181,7 @@ export type CostMultiplierRule = v.InferOutput<typeof CostMultiplierRuleSchema>;
 export type PhaseSeasonality = v.InferOutput<typeof PhaseSeasonalitySchema>;
 export type SeasonEvent = v.InferOutput<typeof SeasonEventSchema>;
 export type Poi = v.InferOutput<typeof PoiSchema>;
+export type Species = v.InferOutput<typeof SpeciesSchema>;
 export type ForkRecs = NonNullable<Fork["recs"]>;
 export type Country = v.InferOutput<typeof Country>;
 

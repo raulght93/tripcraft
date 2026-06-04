@@ -1,4 +1,4 @@
-import { displayFlag, phaseCost, poisFor } from "@tripcraft/engine";
+import { displayFlag, phaseCost, poisFor, speciesForPhase } from "@tripcraft/engine";
 import { colors, fonts, radii } from "../styles/tokens.js";
 import { useTrip } from "../trip/TripContext.jsx";
 import { SeasonBanner } from "./SeasonBanner.jsx";
@@ -39,7 +39,7 @@ function WarningBanner({ text, tone }) {
   );
 }
 
-export function PhaseView({ phaseId }) {
+export function PhaseView({ phaseId, onNavigate }) {
   const { trip, tier, phaseById, legByPhase } = useTrip();
   const phase = phaseById[phaseId];
   if (!phase) return null;
@@ -47,6 +47,7 @@ export function PhaseView({ phaseId }) {
   const days = legByPhase[phaseId]?.days || phase.daysBase;
   const cost = phaseCost(trip, phaseId, days, tier);
   const pois = poisFor(trip, phaseId);
+  const species = speciesForPhase(trip, phaseId);
 
   return (
     <section
@@ -203,6 +204,59 @@ export function PhaseView({ phaseId }) {
               </li>
             ))}
           </ul>
+        </>
+      ) : null}
+
+      {species.length > 0 ? (
+        <>
+          <h3 style={{ fontFamily: fonts.serif, fontSize: 20, margin: "24px 0 8px" }}>
+            Fauna que verás ({species.length})
+          </h3>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            {species.slice(0, 8).map((s) => (
+              <span
+                key={s.id}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "4px 10px 4px 4px",
+                  borderRadius: 999,
+                  border: `1px solid ${colors.border}`,
+                  background: colors.surface,
+                  fontSize: 13,
+                }}
+              >
+                {s.img ? (
+                  <img
+                    src={s.img}
+                    alt=""
+                    loading="lazy"
+                    style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover" }}
+                  />
+                ) : null}
+                {s.name}
+              </span>
+            ))}
+            {onNavigate ? (
+              <button
+                type="button"
+                onClick={() => onNavigate("species")}
+                style={{
+                  fontFamily: fonts.sans,
+                  fontSize: 13,
+                  padding: "6px 12px",
+                  borderRadius: radii.sm,
+                  border: `1px solid ${colors.accent}`,
+                  background: "transparent",
+                  color: colors.accent,
+                  cursor: "pointer",
+                }}
+              >
+                Ver catálogo →
+              </button>
+            ) : null}
+          </div>
         </>
       ) : null}
     </section>

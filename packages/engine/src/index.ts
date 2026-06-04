@@ -25,4 +25,4 @@ export type { DateRange } from "./dates.ts";
 export { computeItinerary, itineraryByPhase } from "./itinerary.ts";
 export type { ItineraryLeg } from "./itinerary.ts";
 
-export { poisFor, addonsFor } from "./content.ts";
+export { poisFor, addonsFor, speciesForPhase } from "./content.ts";
