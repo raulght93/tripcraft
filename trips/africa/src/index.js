@@ -162,6 +162,130 @@ export const AFRICA_TRIP = {
     },
   ],
 
+  // Estacionalidad por fase (óptimo/evitar/eventos). Migrado verbatim de
+  // africa-trip-planning/src/data/seasonality.js. Eventos: `months` (ventana ancha)
+  // o `dates` MM-DD (festival con fecha). Lo cruza el engine con seasonFit.
+  seasonality: {
+    watamu: { optimal: [11, 12, 1, 2, 3], avoid: { months: [4, 5], reason: "lluvias largas" }, events: [] },
+    lamu: {
+      optimal: [11, 12, 1, 2], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [
+        { name: "Festival Maulidi", months: [3, 4], peak: [], desc: "Nacimiento del Profeta; fecha varía con el calendario lunar islámico." },
+        { name: "Lamu Cultural Festival", dates: { start: "11-21", end: "11-24" }, kind: "festival", desc: "Carreras de dhows + bailes + poesía swahili en Stone Town de Lamu." },
+      ],
+    },
+    diani: {
+      optimal: [12, 1, 2, 3, 6, 7, 8, 9], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [{ name: "Temporada de kitesurf", months: [12, 1, 2, 3, 6, 7, 8, 9], peak: [1, 2, 7, 8] }],
+    },
+    "safari-ke": {
+      optimal: [12, 1, 2, 7, 8, 9, 10], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [{ name: "Gran Migración (Masai Mara)", months: [7, 8, 9, 10], peak: [8, 9] }],
+    },
+    mafia: {
+      optimal: [10, 11, 12, 1, 2, 3], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [{ name: "Tiburón ballena", months: [10, 11, 12, 1, 2, 3], peak: [12, 1] }],
+    },
+    "safari-tz-norte": {
+      optimal: [1, 2, 6, 7, 8, 9, 10], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [
+        { name: "Partos de ñus (Ndutu)", months: [1, 2], peak: [2] },
+        { name: "Migración (Serengeti → Mara)", months: [6, 7, 8, 9, 10], peak: [8, 9] },
+      ],
+    },
+    "safari-tz-sur": {
+      optimal: [7, 8, 9, 10], avoid: { months: [3, 4, 5], reason: "lluvias largas (Selous parcialmente cerrado)" }, events: [],
+    },
+    "costa-pemba": {
+      optimal: [7, 8, 9, 10, 12, 1, 2], avoid: { months: [3, 4, 5], reason: "lluvias largas" },
+      events: [{ name: "Mejor visibilidad de buceo", months: [7, 8, 9, 10], peak: [9, 10] }],
+    },
+    "costa-zanzibar": {
+      optimal: [6, 7, 8, 9, 10, 12, 1, 2], avoid: { months: [4, 5], reason: "lluvias largas" },
+      events: [
+        { name: "Sauti za Busara", dates: { start: "02-08", end: "02-11" }, kind: "festival", desc: "Festival de música del África Oriental en Stone Town · 4 noches." },
+        { name: "Zanzibar International Film Festival (ZIFF)", dates: { start: "07-08", end: "07-16" }, kind: "festival", desc: "Cine africano + talleres + conciertos al aire libre." },
+      ],
+    },
+    mozambique: {
+      optimal: [5, 6, 7, 8, 9, 10, 11], avoid: { months: [1, 2, 3], reason: "temporada de ciclones" },
+      events: [{ name: "Buceo en Quirimbas", months: [6, 7, 8, 9, 10], peak: [8, 9] }],
+    },
+    comoros: { optimal: [5, 6, 7, 8, 9, 10], avoid: { months: [12, 1, 2, 3], reason: "lluvias y ciclones" }, events: [] },
+    madagascar: {
+      optimal: [4, 5, 6, 7, 8, 9, 10], avoid: { months: [1, 2, 3], reason: "temporada de ciclones" },
+      events: [
+        { name: "Buceo en Nosy Be", months: [6, 7, 8, 9], peak: [8] },
+        { name: "Ballenas jorobadas (Sainte-Marie)", months: [7, 8, 9], peak: [8] },
+      ],
+    },
+    malawi: {
+      optimal: [5, 6, 7, 8, 9, 10], avoid: null,
+      events: [{ name: "Lake of Stars Festival", dates: { start: "09-26", end: "09-28" }, kind: "festival", desc: "3 días de música frente al lago Malawi (Mangochi)." }],
+    },
+    victoria: {
+      optimal: [3, 4, 5, 6, 7, 8, 9, 10], avoid: null,
+      events: [
+        { name: "Pico de caudal de las cataratas", months: [3, 4, 5], peak: [3, 4] },
+        { name: "Devil's Pool (aguas bajas)", months: [9, 10, 11, 12, 1], peak: [10, 11] },
+      ],
+    },
+    botswana: {
+      optimal: [5, 6, 7, 8, 9, 10], avoid: null,
+      events: [{ name: "Inundación del delta (Okavango)", months: [6, 7, 8, 9], peak: [7, 8] }],
+    },
+    namibia: { optimal: [5, 6, 7, 8, 9, 10], avoid: { months: [1, 2, 3], reason: "lluvias en el norte + calor" }, events: [] },
+    capetown: {
+      optimal: [11, 12, 1, 2, 3, 4], avoid: { months: [6, 7], reason: "invierno húmedo y frío" },
+      events: [
+        { name: "Ballena franca austral (Hermanus)", months: [6, 7, 8, 9, 10], peak: [8, 9] },
+        { name: "Cape Town International Jazz Festival", dates: { start: "03-28", end: "03-29" }, kind: "festival", desc: "Mayor festival de jazz del hemisferio sur · CTICC." },
+      ],
+    },
+    sodwana: {
+      optimal: [3, 4, 5, 6, 11, 12, 1, 2], avoid: null,
+      events: [
+        { name: "Anidación de tortugas", months: [11, 12, 1, 2], peak: [12, 1] },
+        { name: "Migración de ballenas jorobadas", months: [6, 7, 8, 9, 10, 11], peak: [8, 9] },
+      ],
+    },
+    uganda: {
+      optimal: [6, 7, 8, 9, 12, 1, 2], avoid: { months: [3, 4, 5], reason: "lluvias largas (senderos resbaladizos)" },
+      events: [{ name: "Trekking de gorilas (todo el año)", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], peak: [6, 7, 8, 9] }],
+    },
+    rwanda: {
+      optimal: [6, 7, 8, 9, 12, 1, 2], avoid: { months: [3, 4, 5], reason: "lluvias largas (senderos resbaladizos)" },
+      events: [
+        { name: "Trekking de gorilas (todo el año)", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], peak: [6, 7, 8, 9] },
+        { name: "Kwita Izina (bautizo de gorilas)", dates: { start: "09-05", end: "09-05" }, kind: "festival", desc: "Nombran a los bebés gorila del año (Volcanoes NP)." },
+      ],
+    },
+    ethiopia: {
+      optimal: [10, 11, 12, 1, 2, 3], avoid: { months: [6, 7, 8, 9], reason: "lluvias largas (junio el peor)" },
+      events: [
+        { name: "Timkat (Epifanía ortodoxa)", dates: { start: "01-19", end: "01-20" }, kind: "religious", desc: "Procesión del Tabot en Gondar/Lalibela." },
+        { name: "Meskel", dates: { start: "09-27", end: "09-27" }, kind: "religious", desc: "Hallazgo de la Vera Cruz · grandes hogueras." },
+        { name: "Genna (Navidad ortodoxa)", dates: { start: "01-07", end: "01-07" }, kind: "religious", desc: "Misa solemne en Lalibela al amanecer." },
+      ],
+    },
+    egypt: {
+      optimal: [10, 11, 12, 1, 2, 3, 4], avoid: { months: [6, 7, 8], reason: "calor extremo (Luxor/Asuán)" },
+      events: [
+        { name: "Abu Simbel Sun Festival", dates: { start: "02-22", end: "02-22" }, kind: "natural", desc: "El sol ilumina las estatuas internas del templo de Ramsés II (también 22 oct)." },
+        { name: "Abu Simbel Sun Festival (otoño)", dates: { start: "10-22", end: "10-22" }, kind: "natural", desc: "Segunda fecha del fenómeno solar." },
+      ],
+    },
+    jordan: { optimal: [3, 4, 5, 9, 10, 11], avoid: { months: [7, 8], reason: "calor extremo" }, events: [] },
+    westafrica: {
+      optimal: [11, 12, 1, 2, 3, 4], avoid: { months: [6, 7, 8, 9], reason: "monzón de África Occidental (lluvias + humedad)" },
+      events: [
+        { name: "Harmattan (polvo del Sáhara)", months: [12, 1, 2], peak: [1, 2], kind: "natural", desc: "Viento del Sáhara · cielos lechosos, visibilidad aérea reducida." },
+        { name: "Fiesta Nacional del Vudú (Ouidah)", dates: { start: "01-10", end: "01-10" }, kind: "religious", desc: "Capital mundial del vudú (Benín)." },
+        { name: "Saint-Louis Jazz Festival", dates: { start: "05-13", end: "05-17" }, kind: "festival", desc: "Festival africano de jazz más antiguo (Senegal)." },
+      ],
+    },
+  },
+
   // Equivalente a ACTIVE_PHASES de useTripState.js (orden literal des-hardcodeado).
   sequence: [
     { kind: "fork", ref: "fork_costa_ke" },

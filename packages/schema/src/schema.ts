@@ -67,6 +67,24 @@ export const AddonSchema = v.object({
   days: v.optional(v.number()),
 });
 
+export const SeasonEventSchema = v.object({
+  name: v.string(),
+  /** Meses (1-12) en que ocurre (evento recurrente "ancho"). */
+  months: v.optional(v.array(v.number())),
+  /** Ventana MM-DD concreta (festival con fecha). Alternativa a `months`. */
+  dates: v.optional(v.object({ start: v.string(), end: v.string() })),
+  peak: v.optional(v.array(v.number())),
+  kind: v.optional(v.string()),
+  desc: v.optional(v.string()),
+});
+
+export const PhaseSeasonalitySchema = v.object({
+  /** Meses (1-12) óptimos para visitar la fase. */
+  optimal: v.array(v.number()),
+  avoid: v.optional(v.nullable(v.object({ months: v.array(v.number()), reason: v.string() }))),
+  events: v.optional(v.array(SeasonEventSchema)),
+});
+
 export const CostMultiplierRuleSchema = v.object({
   type: v.string(),
   /** nº de viajeros (string) → factor sobre el subtotal por persona. */
@@ -93,6 +111,7 @@ export const TripSchema = v.object({
   forks: v.array(ForkSchema),
   sequence: v.array(SequenceItemSchema),
   addons: v.optional(v.record(v.string(), v.array(AddonSchema))),
+  seasonality: v.optional(v.record(v.string(), PhaseSeasonalitySchema)),
 });
 
 // ── Tipos derivados (fuente única) ────────────────────────────────────────────
@@ -102,6 +121,8 @@ export type Fork = v.InferOutput<typeof ForkSchema>;
 export type SequenceItem = v.InferOutput<typeof SequenceItemSchema>;
 export type Addon = v.InferOutput<typeof AddonSchema>;
 export type CostMultiplierRule = v.InferOutput<typeof CostMultiplierRuleSchema>;
+export type PhaseSeasonality = v.InferOutput<typeof PhaseSeasonalitySchema>;
+export type SeasonEvent = v.InferOutput<typeof SeasonEventSchema>;
 export type ForkRecs = NonNullable<Fork["recs"]>;
 export type Country = v.InferOutput<typeof Country>;
 
