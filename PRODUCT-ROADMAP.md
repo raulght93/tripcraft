@@ -26,6 +26,8 @@ Tomadas el 2026-06-04 (ver §6 para las que aún quedan abiertas):
 | **Auth** | Propia ligera sobre Workers | Token de dispositivo anónimo → magic-link opcional. Supabase como plan B. |
 | **Calidad / clean code** | Estándar formal desde el día 1 | Núcleo puro testeable, tests ≥90%, a11y como gate de CI, budget de bundle, DoD. Ver [`docs/engineering-standards.md`](docs/engineering-standards.md). |
 | **Preservación de features** | Inventario vivo | Todo lo de Africa/Basque (estética, temas, a11y, animaciones, integraciones, gotchas) catalogado por fase. Ver [`docs/feature-inventory.md`](docs/feature-inventory.md). |
+| **Storage de viajes** | Documento JSON único (blob), no normalizado | Un viaje = 1 doc validado con `validateTrip`/`validateStoredTrip` al escribir. Envelope `StoredTrip { id, slug, ownerId?, baseTemplateId?, version, updatedAt, doc }` ya en el schema. |
+| **Entrega del contenido** | `loadTrip(slug)` async; origen intercambiable | Camino: import JS → **fetch JSON (chunk lazy, hoy)** → API del backend (Fase 2). El contenido vive fuera del bundle principal; el contrato no cambia. |
 
 ---
 

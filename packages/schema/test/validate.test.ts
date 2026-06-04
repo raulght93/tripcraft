@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 // la plantilla real valida, y los documentos mal formados se rechazan.
 import { test } from "node:test";
 import { AFRICA_TRIP } from "../../../trips/africa/src/index.js";
-import { safeValidateTrip, validateTrip } from "../src/index.ts";
+import { safeValidateTrip, validateStoredTrip, validateTrip } from "../src/index.ts";
 
 test("AFRICA_TRIP es un Trip válido", () => {
   const trip = validateTrip(AFRICA_TRIP);
@@ -27,4 +27,24 @@ test("rechaza country que no es ISO alpha-2", () => {
 test("rechaza un sequence item con kind desconocido", () => {
   const bad = { ...AFRICA_TRIP, sequence: [{ kind: "teleport", ref: "watamu" }] };
   assert.equal(safeValidateTrip(bad).success, false);
+});
+
+test("un Trip es ALMACENABLE: round-trip JSON → validateTrip (storage-ready)", () => {
+  const roundTripped = JSON.parse(JSON.stringify(AFRICA_TRIP));
+  const trip = validateTrip(roundTripped);
+  assert.equal(trip.id, "africa-2026");
+  assert.equal(trip.phases.length, AFRICA_TRIP.phases.length);
+});
+
+test("StoredTrip envuelve un doc Trip válido (contrato del backend)", () => {
+  const stored = validateStoredTrip({
+    id: "trip_abc",
+    slug: "africa-oriental-austral",
+    baseTemplateId: "africa-2026",
+    version: 1,
+    updatedAt: "2026-06-04T00:00:00Z",
+    doc: AFRICA_TRIP,
+  });
+  assert.equal(stored.doc.id, "africa-2026");
+  assert.equal(stored.ownerId, undefined); // sin owner = plantilla del catálogo
 });

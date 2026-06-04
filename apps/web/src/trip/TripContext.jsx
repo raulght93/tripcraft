@@ -1,7 +1,8 @@
 import { buildActivePhaseIds, computeItinerary, itineraryByPhase } from "@tripcraft/engine";
-import { validateTrip } from "@tripcraft/schema";
-import { AFRICA_TRIP } from "@tripcraft/trip-africa";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { colors, fonts } from "../styles/tokens.js";
+import { loadTrip } from "./loadTrip.js";
+import { DEFAULT_TRIP_SLUG } from "./registry.js";
 
 const TripCtx = createContext(null);
 
@@ -23,13 +24,10 @@ const saveLS = (key, value) => {
 };
 
 /**
- * Fuente única del estado del viaje. El documento Trip se valida UNA vez en la
- * frontera (validateTrip) — dentro del árbol, el dato es de fiar. El estado del
- * usuario (forks, tier) se persiste en localStorage nesteado por tripId.
+ * Estado del viaje, con el documento YA validado (lo valida loadTrip en la
+ * frontera). El estado del usuario (forks, tier, fecha) se persiste por tripId.
  */
-export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
-  const trip = useMemo(() => validateTrip(rawTrip), [rawTrip]);
-
+function TripState({ trip, children }) {
   const forkDefaults = useMemo(
     () => Object.fromEntries(trip.forks.map((f) => [f.id, f.default])),
     [trip],
@@ -71,8 +69,6 @@ export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
     [trip, forkChoice],
   );
   const phaseById = useMemo(() => Object.fromEntries(trip.phases.map((p) => [p.id, p])), [trip]);
-
-  // Capa de fechas: tramos datados derivados de la fecha de inicio + ruta activa.
   const itinerary = useMemo(
     () => computeItinerary(trip, startDate, activePhaseIds),
     [trip, startDate, activePhaseIds],
@@ -109,6 +105,38 @@ export function TripProvider({ children, rawTrip = AFRICA_TRIP }) {
   );
 
   return <TripCtx.Provider value={value}>{children}</TripCtx.Provider>;
+}
+
+const notice = (msg, busy) => (
+  <div
+    role={busy ? "status" : "alert"}
+    aria-busy={busy || undefined}
+    style={{ padding: 40, fontFamily: fonts.sans, color: colors.muted, background: colors.bg }}
+  >
+    {msg}
+  </div>
+);
+
+/** Carga el viaje (por slug) de forma asíncrona; el origen es intercambiable (loadTrip). */
+export function TripProvider({ slug = DEFAULT_TRIP_SLUG, children }) {
+  const [trip, setTrip] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    setTrip(null);
+    setError(null);
+    loadTrip(slug)
+      .then((t) => alive && setTrip(t))
+      .catch((e) => alive && setError(e));
+    return () => {
+      alive = false;
+    };
+  }, [slug]);
+
+  if (error) return notice("No se pudo cargar el viaje.", false);
+  if (!trip) return notice("Cargando viaje…", true);
+  return <TripState trip={trip}>{children}</TripState>;
 }
 
 export function useTrip() {

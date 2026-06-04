@@ -45,6 +45,8 @@ test("una fase de salto (0 días) no avanza el calendario", () => {
 test("poisFor devuelve los POIs migrados de una fase (y [] si no hay)", () => {
   assert.equal(poisFor(T, "watamu").length, 9);
   assert.equal(poisFor(T, "safari-ke")[0]?.name, "Nairobi");
+  assert.equal(poisFor(T, "safari-tz-norte").length, 9); // migrado en este incremento
+  assert.equal(poisFor(T, "costa-pemba").length, 9);
   assert.deepEqual(poisFor(T, "egypt"), []); // aún sin migrar
 });
 

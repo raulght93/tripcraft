@@ -125,8 +125,25 @@ export const TripSchema = v.object({
   pois: v.optional(v.record(v.string(), v.array(PoiSchema))),
 });
 
+/**
+ * Envelope de persistencia (contrato del backend, Fase 2). Un viaje almacenado =
+ * el documento `doc` (validado) + metadatos. Modelo de storage: **documento JSON
+ * único** (un blob por viaje en D1/KV), no normalizado. `baseTemplateId` enlaza un
+ * clon con la plantilla de la que salió; `ownerId` ausente = plantilla del catálogo.
+ */
+export const StoredTripSchema = v.object({
+  id: v.string(),
+  slug: v.string(),
+  ownerId: v.optional(v.string()),
+  baseTemplateId: v.optional(v.string()),
+  version: v.number(),
+  updatedAt: v.string(),
+  doc: TripSchema,
+});
+
 // ── Tipos derivados (fuente única) ────────────────────────────────────────────
 export type Trip = v.InferOutput<typeof TripSchema>;
+export type StoredTrip = v.InferOutput<typeof StoredTripSchema>;
 export type Phase = v.InferOutput<typeof PhaseSchema>;
 export type Fork = v.InferOutput<typeof ForkSchema>;
 export type SequenceItem = v.InferOutput<typeof SequenceItemSchema>;
@@ -147,4 +164,9 @@ export function validateTrip(data: unknown): Trip {
 /** Variante que no lanza: { success, output | issues }. */
 export function safeValidateTrip(data: unknown) {
   return v.safeParse(TripSchema, data);
+}
+
+/** Valida un viaje almacenado (envelope + doc). Úsalo al leer/escribir en el backend. */
+export function validateStoredTrip(data: unknown): StoredTrip {
+  return v.parse(StoredTripSchema, data);
 }

@@ -6,15 +6,20 @@ import { TripProvider } from "../src/trip/TripContext.jsx";
 
 afterEach(cleanup);
 
-const renderApp = () =>
-  render(
+// El viaje se carga de forma asíncrona (loadTrip → import dinámico + validateTrip),
+// así que esperamos a que aparezca la tablist antes de aseverar.
+const renderApp = async () => {
+  const utils = render(
     <TripProvider>
       <App />
     </TripProvider>,
   );
+  await screen.findByRole("tablist");
+  return utils;
+};
 
-test("las tabs se derivan de trip.sequence (meta + forks + fases + extensiones)", () => {
-  renderApp();
+test("las tabs se derivan de trip.sequence (meta + forks + fases + extensiones)", async () => {
+  await renderApp();
   const tablist = screen.getByRole("tablist");
   expect(within(tablist).getByRole("tab", { name: /Itinerario/ })).toBeInTheDocument();
   expect(within(tablist).getByRole("tab", { name: /Costa Kenia/ })).toBeInTheDocument();
@@ -22,34 +27,29 @@ test("las tabs se derivan de trip.sequence (meta + forks + fases + extensiones)"
   expect(within(tablist).getByRole("tab", { name: /Extensiones/ })).toBeInTheDocument();
 });
 
-test("el tab por defecto (Itinerario) muestra la línea temporal datada", () => {
-  renderApp();
-  // El Timeline lista las fases activas con fechas derivadas de la fecha de inicio.
+test("el tab por defecto (Itinerario) muestra la línea temporal datada", async () => {
+  await renderApp();
   expect(screen.getByText(/Watamu balance/)).toBeInTheDocument();
   expect(screen.getByText(/Fecha de inicio/)).toBeInTheDocument();
 });
 
-test("el fork Costa Kenia muestra sus opciones con coste por el engine", () => {
-  renderApp();
+test("el fork Costa Kenia muestra sus opciones con coste por el engine", async () => {
+  await renderApp();
   fireEvent.click(screen.getByRole("tab", { name: /Costa Kenia/ }));
-  const radios = screen.getAllByRole("radio");
-  expect(radios.length).toBeGreaterThanOrEqual(3); // watamu / lamu / diani
+  expect(screen.getAllByRole("radio").length).toBeGreaterThanOrEqual(3);
   expect(screen.getAllByText(/€/).length).toBeGreaterThan(0);
 });
 
-test("una fase fija muestra coste calculado, banner de temporada y POIs", () => {
-  renderApp();
+test("una fase fija muestra coste calculado, banner de temporada y POIs", async () => {
+  await renderApp();
   fireEvent.click(screen.getByRole("tab", { name: /Safari Kenya/ }));
-  // safari-ke 13 días mid = 3050 €.
-  expect(screen.getByText(/3050|3\.050/)).toBeInTheDocument();
-  // Con inicio 2026-11-10, safari-ke cae en diciembre → temporada óptima (Track B+D).
-  expect(screen.getByText(/Temporada óptima/)).toBeInTheDocument();
-  // POIs migrados.
+  expect(screen.getByText(/3050|3\.050/)).toBeInTheDocument(); // 13·230 + 60
+  expect(screen.getByText(/Temporada óptima/)).toBeInTheDocument(); // Track B+D
   expect(screen.getAllByText(/Nairobi/).length).toBeGreaterThan(0);
   expect(screen.getByText(/Maasai Mara NR/)).toBeInTheDocument();
 });
 
 test("el shell no tiene violaciones de accesibilidad (axe)", async () => {
-  const { container } = renderApp();
+  const { container } = await renderApp();
   expect(await axe(container)).toHaveNoViolations();
 });
