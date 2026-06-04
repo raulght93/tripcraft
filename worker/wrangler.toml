@@ -1,0 +1,10 @@
+name = "tripcraft-api"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Crear con:  wrangler d1 create tripcraft   → pega el database_id aquí.
+# Migrar con: wrangler d1 execute tripcraft --file=worker/schema.sql
+[[d1_databases]]
+binding = "DB"
+database_name = "tripcraft"
+database_id = "REPLACE_WITH_D1_ID"

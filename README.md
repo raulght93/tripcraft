@@ -28,7 +28,11 @@ Biome + CI) tras la [review de Fase 1](docs/review-fase1.md), y **shell `apps/we
 (Vite + React): tabs derivadas de `trip.sequence`, coste por el engine, tema
 light/dark/auto, validación en la frontera, tests RTL + axe. Modelo: tiers keyed,
 country ISO con bandera derivada, fuente única de tipos vía Valibot.
-Pendiente: contenido editorial, POIs, especies, add-ons; mapas; y enriquecer la UI.
+Contenido: POIs (5+3 fases), food curado (Wikimedia), especies (catálogo + cross-link),
+hero/datos prácticos/avisos clima-seguridad. **Fase 2 arrancada**: `worker/` (Cloudflare
+Worker + D1) con API de "mis viajes" sobre el contrato `StoredTrip` — router puro testeado
+(auth ligera, aislamiento por owner, validación en la frontera). Pendiente: resto de POIs/
+add-ons, mapas, y desplegar el worker + cablear `loadTrip` al backend.
 
 ## Desarrollo
 
