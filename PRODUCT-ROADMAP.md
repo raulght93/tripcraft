@@ -19,6 +19,11 @@ Tomadas el 2026-06-04 (ver §6 para las que aún quedan abiertas):
 | **Base de código** | Híbrida: motor de Africa + backend del Vasco | Aprovecha el ≈70% genérico de Africa y el Worker+KV ya probado del Vasco. |
 | **Alcance MVP** | Solo individual primero | Colaboración multi-usuario diferida a Fase 4. Reduce riesgo y time-to-market. |
 | **Ambición / modelo** | Open-source / portfolio | Sin pagos, sin multi-tenant aislado fuerte. Auth ligera. Foco en calidad y self-host. |
+| **Hosting** | Cloudflare (Pages + Workers + D1 + R2) | Gratis para el horizonte previsible, **uso comercial permitido**, sin lock-in de framework. Ver [`docs/hosting-comparison.md`](docs/hosting-comparison.md). |
+| **Framework front** | Vite SPA (framework-agnóstico, **no** Next.js) | Portable entre hosts; evita atarse a Vercel y su restricción comercial. |
+| **TypeScript** | Solo en `packages/schema` + `packages/engine` | El schema se define con **Valibot** (1 fuente → tipos TS *y* validación runtime). `trips/*` y la UI siguen en JS (`allowJs`). |
+| **Backend / DB** | Cloudflare Workers + **D1 (SQL)** | Evoluciona el patrón Worker+KV del Vasco a SQL para "mis viajes por usuario". KV para cachés/sesiones. |
+| **Auth** | Propia ligera sobre Workers | Token de dispositivo anónimo → magic-link opcional. Supabase como plan B. |
 
 ---
 
@@ -144,24 +149,20 @@ actividades y notas), la guarda y la comparte por enlace — sin tocar código."
 
 ## 6. Decisiones aún por refinar
 
-Estas no bloquean el arranque del spike, pero hay que cerrarlas pronto:
+**Decididas el 2026-06-04** (movidas a §0): TypeScript (schema+engine con Valibot),
+auth (propia ligera sobre Workers), KV vs D1 (→ D1), hosting (Cloudflare) y
+framework (Vite SPA). Ver el estudio en [`docs/hosting-comparison.md`](docs/hosting-comparison.md).
 
-1. **TypeScript en el core nuevo.** Se descartó para Africa (con razón). Pero un
-   schema genérico + engine + validación multi-trip es justo donde la falta de
-   tipos más duele. **Recomendación:** TS solo en `packages/schema` y
-   `packages/engine`; `trips/*` y la UI pueden seguir en JS. Alternativa si se
-   rechaza: JSON Schema + validación runtime estricta al cargar cada trip.
-   → *Decidir en Fase 0.*
-2. **Auth para OSS individual:** token de dispositivo anónimo (cero fricción) vs
-   magic-link (cross-device real). **Recomendación:** anónimo + "reclama tu cuenta
-   con email" opcional.
-3. **KV vs D1:** el Vasco usa KV (1 blob/viaje). Para "mis viajes por usuario" +
-   listados, **D1 (SQL)** encaja mejor cuando haya cuentas. KV basta para el MVP.
-4. **Imágenes a escala:** hoy hotlink a Wikimedia (con límites de tamaño ya
-   documentados). A escala pública conviene proxy/caché en R2.
-5. **Nombre del producto** (hoy "Tripcraft" provisional) y dominio.
-6. **Licencia OSS** (MIT vs AGPL — relevante si no se quiere que terceros lo
+Aún abiertas:
+
+1. **Imágenes a escala:** hoy hotlink a Wikimedia (con límites de tamaño ya
+   documentados; además esquiva la cláusula de "no servir media" de CF). A escala
+   pública o con imágenes propias → proxy/caché en **R2** (egress gratis).
+2. **Nombre del producto** (hoy "Tripcraft" provisional) y dominio.
+3. **Licencia OSS** (MIT vs AGPL — relevante si no se quiere que terceros lo
    releven como SaaS cerrado).
+4. **Validador de schema:** Valibot (más pequeño, tree-shakeable) vs Zod (más
+   ecosistema). Recomendación de partida: **Valibot**. → confirmar en el spike.
 
 ---
 
