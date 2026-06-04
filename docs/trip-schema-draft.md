@@ -1,5 +1,12 @@
 # Trip Schema v0 — borrador (Fase 0)
 
+> **Nota (Fase 1):** el schema canónico vive ahora en
+> [`packages/schema/src/schema.ts`](../packages/schema/src/schema.ts) (Valibot,
+> fuente única de tipos). El modelo evolucionó respecto a este borrador tras la
+> [review de Fase 1](review-fase1.md): **coste keyed por tier** `{ low, mid, high }`
+> (no array posicional) y **country ISO** con bandera derivada. Este documento se
+> conserva como registro del diseño inicial.
+
 > Objetivo del spike: probar que un viaje real (Africa) **cabe** en un documento
 > serializable que un engine agnóstico pueda consumir sin pérdida de información
 > ni de comportamiento. Si una fase de Africa no encaja limpia, el modelo cambia

@@ -57,8 +57,9 @@
   Alternativa si falta regla: ESLint + `eslint-plugin-jsx-a11y`.
 - **A11y como gate de CI:** `jsx-a11y` + axe en los tests de componentes. Un fallo
   de accesibilidad **rompe el build**, no es un aviso (ver §6).
-- **Pipeline CI** (GitHub Actions): `typecheck` → `lint` → `test` → `build` →
-  `size-limit`. Verde obligatorio para merge.
+- **Pipeline CI** (GitHub Actions, [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):
+  `typecheck` → `lint` → `test:coverage`. Verde obligatorio para merge. Pendiente
+  de añadir `build` + `size-limit` cuando exista `apps/web`.
 - **Hooks de pre-commit** ligeros (lint-staged + format) — sin ralentizar.
 
 ## 5. Convenciones de código

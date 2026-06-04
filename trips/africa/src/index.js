@@ -1,26 +1,30 @@
-// Plantilla "Africa" — ESQUELETO COMPLETO (Fase 1, incremento 1).
+// Plantilla "Africa" — ESQUELETO COMPLETO (Fase 1).
 //
 // Todas las fases con sus días/costes EXACTOS de
 // africa-trip-planning/src/data/phaseMeta.js + los 7 forks (opciones, default,
 // recs) de forkRecs.js + la secuencia completa equivalente a ACTIVE_PHASES de
 // useTripState.js (verificado 2026-06-04).
 //
+// Modelo: coste KEYED por tier ({ low, mid, high }); país = ISO 3166-1 alpha-2
+// (o array multi-país); la bandera se DERIVA del ISO (engine: displayFlag).
+//
 // AÚN PENDIENTE (incrementos siguientes): contenido editorial (hero/slides/info),
 // POIs, especies, seasonality, add-ons, checklist, connectors, companions.
 // El contenido del viaje es JS puro (decisión §0 del roadmap).
 
-const FLAG = { KE: "🇰🇪", TZ: "🇹🇿", MZ: "🇲🇿", KM: "🇰🇲", MG: "🇲🇬", MW: "🇲🇼", ZM: "🇿🇲", BW: "🇧🇼", NA: "🇳🇦", ZA: "🇿🇦", UG: "🇺🇬", RW: "🇷🇼", ET: "🇪🇹", EG: "🇪🇬", JO: "🇯🇴", WA: "🌍", SKIP: "⏭️" };
+// Coste por tier. Helper para no repetir las claves en cada fase.
+const cost = (low, mid, high) => ({ low, mid, high });
 
 // Fases de "salto". fixedCost = coste del vuelo directo al saltar la fase.
 //
 // ⚠️ FIDELIDAD/BACKLOG (heredado de Africa): este fixedCost es LATENTE. Como las
 // fases de salto tienen 0 días, el `fixedFactor` de phaseCost se anula y el coste
-// NO se cobra en el flujo actual (skip_f1/skip_f2 sólo entran en la ruta si se
-// eligen, y entonces aportan 0). Se reproduce tal cual; decidir en Fase 1 si el
+// NO se cobra en el flujo actual. Se reproduce tal cual; decidir en Fase 1 si el
 // coste de salto debe contarse (probablemente sí). Ver docs/feature-inventory.md.
-const skipPhase = (id, title, fixedCost = [0, 0, 0]) => ({
-  id, title, flag: FLAG.SKIP, daysBase: 0, daysMin: 0, daysMax: 0,
-  dailyCost: [0, 0, 0], fixedCost,
+// `flag: "⏭️"` es un override: una transición no es un país, no tiene bandera ISO.
+const skipPhase = (id, title, fixedCost = cost(0, 0, 0)) => ({
+  id, title, flag: "⏭️", daysBase: 0, daysMin: 0, daysMax: 0,
+  dailyCost: cost(0, 0, 0), fixedCost,
 });
 
 /** @type {import("@tripcraft/schema").Trip} */
@@ -42,52 +46,52 @@ export const AFRICA_TRIP = {
 
   phases: [
     // ── Costa Kenia (fork) ──
-    { id: "watamu", title: "Watamu balance", flag: FLAG.KE, country: "Kenya", daysBase: 25, daysMin: 14, daysMax: 35, dailyCost: [36, 75, 145], fixedCost: [0, 0, 0], interests: ["dive", "nature"] },
-    { id: "lamu", title: "Lamu UNESCO", flag: FLAG.KE, country: "Kenya", daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: [32, 72, 145], fixedCost: [130, 220, 420], interests: ["culture", "foodie"] },
-    { id: "diani", title: "Diani turismo + kitesurf", flag: FLAG.KE, country: "Kenya", daysBase: 22, daysMin: 14, daysMax: 32, dailyCost: [38, 80, 170], fixedCost: [40, 60, 100], interests: ["adventure", "nature"] },
+    { id: "watamu", title: "Watamu balance", country: "KE", daysBase: 25, daysMin: 14, daysMax: 35, dailyCost: cost(36, 75, 145), fixedCost: cost(0, 0, 0), interests: ["dive", "nature"] },
+    { id: "lamu", title: "Lamu UNESCO", country: "KE", daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: cost(32, 72, 145), fixedCost: cost(130, 220, 420), interests: ["culture", "foodie"] },
+    { id: "diani", title: "Diani turismo + kitesurf", country: "KE", daysBase: 22, daysMin: 14, daysMax: 32, dailyCost: cost(38, 80, 170), fixedCost: cost(40, 60, 100), interests: ["adventure", "nature"] },
 
     // ── Fijas tras Costa Kenia ──
-    { id: "safari-ke", title: "Safari Kenya (Masái Mara)", flag: FLAG.KE, country: "Kenya", daysBase: 13, daysMin: 8, daysMax: 18, dailyCost: [125, 230, 400], fixedCost: [40, 60, 100], interests: ["safari", "nature"] },
-    { id: "mafia", title: "Mafia · Costa Tanzania", flag: FLAG.TZ, country: "Tanzania", daysBase: 23, daysMin: 14, daysMax: 30, dailyCost: [55, 100, 175], fixedCost: [120, 145, 180], interests: ["dive", "nature"] },
+    { id: "safari-ke", title: "Safari Kenya (Masái Mara)", country: "KE", daysBase: 13, daysMin: 8, daysMax: 18, dailyCost: cost(125, 230, 400), fixedCost: cost(40, 60, 100), interests: ["safari", "nature"] },
+    { id: "mafia", title: "Mafia · Costa Tanzania", country: "TZ", daysBase: 23, daysMin: 14, daysMax: 30, dailyCost: cost(55, 100, 175), fixedCost: cost(120, 145, 180), interests: ["dive", "nature"] },
 
     // ── Uganda / Ruanda (fork opcional) ──
-    { id: "uganda", title: "Uganda — Gorilas + Sabana", flag: FLAG.UG, country: "Uganda", daysBase: 14, daysMin: 10, daysMax: 20, dailyCost: [80, 160, 320], fixedCost: [950, 1100, 1350], interests: ["safari", "adventure"] },
-    { id: "rwanda", title: "Ruanda — Gorilas + Lago Kivu", flag: FLAG.RW, country: "Ruanda", daysBase: 10, daysMin: 7, daysMax: 14, dailyCost: [100, 200, 420], fixedCost: [1700, 1900, 2200], interests: ["culture", "adventure"] },
+    { id: "uganda", title: "Uganda — Gorilas + Sabana", country: "UG", daysBase: 14, daysMin: 10, daysMax: 20, dailyCost: cost(80, 160, 320), fixedCost: cost(950, 1100, 1350), interests: ["safari", "adventure"] },
+    { id: "rwanda", title: "Ruanda — Gorilas + Lago Kivu", country: "RW", daysBase: 10, daysMin: 7, daysMax: 14, dailyCost: cost(100, 200, 420), fixedCost: cost(1700, 1900, 2200), interests: ["culture", "adventure"] },
     skipPhase("skip_uganda", "Directo a Tanzania"),
 
     // ── Safari Tanzania (fork) ──
-    { id: "safari-tz-norte", title: "Safari Norte clásico", flag: FLAG.TZ, country: "Tanzania", daysBase: 14, daysMin: 10, daysMax: 18, dailyCost: [120, 220, 400], fixedCost: [30, 50, 100], interests: ["safari", "nature"] },
-    { id: "safari-tz-sur", title: "Safari Sur salvaje", flag: FLAG.TZ, country: "Tanzania", daysBase: 11, daysMin: 8, daysMax: 16, dailyCost: [150, 280, 500], fixedCost: [220, 470, 920], interests: ["safari", "adventure"] },
+    { id: "safari-tz-norte", title: "Safari Norte clásico", country: "TZ", daysBase: 14, daysMin: 10, daysMax: 18, dailyCost: cost(120, 220, 400), fixedCost: cost(30, 50, 100), interests: ["safari", "nature"] },
+    { id: "safari-tz-sur", title: "Safari Sur salvaje", country: "TZ", daysBase: 11, daysMin: 8, daysMax: 16, dailyCost: cost(150, 280, 500), fixedCost: cost(220, 470, 920), interests: ["safari", "adventure"] },
 
     // ── Costa Tanzania (fork) ──
-    { id: "costa-pemba", title: "Pemba virgen", flag: FLAG.TZ, country: "Tanzania", daysBase: 20, daysMin: 12, daysMax: 28, dailyCost: [50, 95, 170], fixedCost: [70, 90, 110], interests: ["dive", "nature"] },
-    { id: "costa-zanzibar", title: "Zanzíbar cultural", flag: FLAG.TZ, country: "Tanzania", daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: [45, 90, 175], fixedCost: [65, 80, 115], interests: ["culture", "foodie"] },
+    { id: "costa-pemba", title: "Pemba virgen", country: "TZ", daysBase: 20, daysMin: 12, daysMax: 28, dailyCost: cost(50, 95, 170), fixedCost: cost(70, 90, 110), interests: ["dive", "nature"] },
+    { id: "costa-zanzibar", title: "Zanzíbar cultural", country: "TZ", daysBase: 18, daysMin: 10, daysMax: 28, dailyCost: cost(45, 90, 175), fixedCost: cost(65, 80, 115), interests: ["culture", "foodie"] },
 
     // ── Índico profundo (fork) ──
-    { id: "mozambique", title: "Quirimbas, Mozambique", flag: FLAG.MZ, country: "Mozambique", daysBase: 18, daysMin: 14, daysMax: 25, dailyCost: [46, 110, 250], fixedCost: [430, 540, 620], interests: ["dive", "nature"] },
-    { id: "comoros", title: "Mohéli, Comoras", flag: FLAG.KM, country: "Comoras", daysBase: 18, daysMin: 14, daysMax: 25, dailyCost: [38, 90, 200], fixedCost: [380, 430, 510], interests: ["nature", "adventure"] },
-    { id: "madagascar", title: "Madagascar — Nosy Be", flag: FLAG.MG, country: "Madagascar", daysBase: 21, daysMin: 14, daysMax: 35, dailyCost: [45, 95, 215], fixedCost: [310, 430, 580], interests: ["nature", "birding"] },
-    { id: "malawi", title: "Malawi — Lago Malawi", flag: FLAG.MW, country: "Malawi", daysBase: 18, daysMin: 12, daysMax: 30, dailyCost: [28, 60, 120], fixedCost: [120, 220, 320], interests: ["dive", "nature"] },
-    skipPhase("skip_f1", "Saltar Índico (vuelo directo)", [400, 500, 600]),
+    { id: "mozambique", title: "Quirimbas, Mozambique", country: "MZ", daysBase: 18, daysMin: 14, daysMax: 25, dailyCost: cost(46, 110, 250), fixedCost: cost(430, 540, 620), interests: ["dive", "nature"] },
+    { id: "comoros", title: "Mohéli, Comoras", country: "KM", daysBase: 18, daysMin: 14, daysMax: 25, dailyCost: cost(38, 90, 200), fixedCost: cost(380, 430, 510), interests: ["nature", "adventure"] },
+    { id: "madagascar", title: "Madagascar — Nosy Be", country: "MG", daysBase: 21, daysMin: 14, daysMax: 35, dailyCost: cost(45, 95, 215), fixedCost: cost(310, 430, 580), interests: ["nature", "birding"] },
+    { id: "malawi", title: "Malawi — Lago Malawi", country: "MW", daysBase: 18, daysMin: 12, daysMax: 30, dailyCost: cost(28, 60, 120), fixedCost: cost(120, 220, 320), interests: ["dive", "nature"] },
+    skipPhase("skip_f1", "Saltar Índico (vuelo directo)", cost(400, 500, 600)),
 
     // ── Fijas: África austral ──
-    { id: "victoria", title: "Victoria Falls", flag: FLAG.ZM, country: "Zambia/Zimbabwe", daysBase: 12, daysMin: 7, daysMax: 18, dailyCost: [32, 80, 185], fixedCost: [380, 520, 720], interests: ["adventure", "nature"] },
-    { id: "botswana", title: "Botswana", flag: FLAG.BW, country: "Botswana", daysBase: 13, daysMin: 8, daysMax: 20, dailyCost: [110, 230, 500], fixedCost: [110, 220, 410], interests: ["safari", "nature"] },
+    { id: "victoria", title: "Victoria Falls", country: ["ZM", "ZW"], daysBase: 12, daysMin: 7, daysMax: 18, dailyCost: cost(32, 80, 185), fixedCost: cost(380, 520, 720), interests: ["adventure", "nature"] },
+    { id: "botswana", title: "Botswana", country: "BW", daysBase: 13, daysMin: 8, daysMax: 20, dailyCost: cost(110, 230, 500), fixedCost: cost(110, 220, 410), interests: ["safari", "nature"] },
 
     // ── Final del viaje (fork) ──
-    { id: "namibia", title: "Namibia — Roadtrip", flag: FLAG.NA, country: "Namibia", daysBase: 19, daysMin: 12, daysMax: 28, dailyCost: [45, 100, 210], fixedCost: [220, 320, 430], interests: ["adventure", "nature"] },
-    { id: "capetown", title: "Ciudad del Cabo", flag: FLAG.ZA, country: "Sudáfrica", daysBase: 15, daysMin: 8, daysMax: 25, dailyCost: [42, 95, 180], fixedCost: [100, 150, 380], interests: ["culture", "foodie"] },
-    { id: "sodwana", title: "Sodwana Bay (KZN)", flag: FLAG.ZA, country: "Sudáfrica", daysBase: 17, daysMin: 10, daysMax: 25, dailyCost: [40, 90, 195], fixedCost: [120, 175, 195], interests: ["dive", "nature"] },
-    skipPhase("skip_f2", "Saltar Sudáfrica/Namibia", [300, 400, 500]),
+    { id: "namibia", title: "Namibia — Roadtrip", country: "NA", daysBase: 19, daysMin: 12, daysMax: 28, dailyCost: cost(45, 100, 210), fixedCost: cost(220, 320, 430), interests: ["adventure", "nature"] },
+    { id: "capetown", title: "Ciudad del Cabo", country: "ZA", daysBase: 15, daysMin: 8, daysMax: 25, dailyCost: cost(42, 95, 180), fixedCost: cost(100, 150, 380), interests: ["culture", "foodie"] },
+    { id: "sodwana", title: "Sodwana Bay (KZN)", country: "ZA", daysBase: 17, daysMin: 10, daysMax: 25, dailyCost: cost(40, 90, 195), fixedCost: cost(120, 175, 195), interests: ["dive", "nature"] },
+    skipPhase("skip_f2", "Saltar Sudáfrica/Namibia", cost(300, 400, 500)),
 
     // ── África Occidental (fork opcional) ──
-    { id: "westafrica", title: "África Occidental", flag: FLAG.WA, country: "Senegal · Gambia · Ghana · Benín/Togo", daysBase: 22, daysMin: 14, daysMax: 35, dailyCost: [28, 75, 175], fixedCost: [520, 700, 980], interests: ["culture", "foodie"] },
+    { id: "westafrica", title: "África Occidental", country: ["SN", "GM", "GH", "TG", "BJ"], daysBase: 22, daysMin: 14, daysMax: 35, dailyCost: cost(28, 75, 175), fixedCost: cost(520, 700, 980), interests: ["culture", "foodie"] },
     skipPhase("skip_westafrica", "Saltar África Occidental"),
 
     // ── Extensiones de cierre (mayo-junio) ──
-    { id: "ethiopia", title: "Etiopía", flag: FLAG.ET, country: "Etiopía", daysBase: 18, daysMin: 12, daysMax: 28, dailyCost: [25, 65, 135], fixedCost: [400, 510, 620], interests: ["culture", "adventure"] },
-    { id: "egypt", title: "Egipto", flag: FLAG.EG, country: "Egipto", daysBase: 18, daysMin: 12, daysMax: 28, dailyCost: [38, 95, 230], fixedCost: [240, 300, 410], interests: ["culture"] },
-    { id: "jordan", title: "Jordania", flag: FLAG.JO, country: "Jordania", daysBase: 14, daysMin: 8, daysMax: 21, dailyCost: [52, 130, 320], fixedCost: [170, 270, 440], interests: ["culture", "adventure"] },
+    { id: "ethiopia", title: "Etiopía", country: "ET", daysBase: 18, daysMin: 12, daysMax: 28, dailyCost: cost(25, 65, 135), fixedCost: cost(400, 510, 620), interests: ["culture", "adventure"] },
+    { id: "egypt", title: "Egipto", country: "EG", daysBase: 18, daysMin: 12, daysMax: 28, dailyCost: cost(38, 95, 230), fixedCost: cost(240, 300, 410), interests: ["culture"] },
+    { id: "jordan", title: "Jordania", country: "JO", daysBase: 14, daysMin: 8, daysMax: 21, dailyCost: cost(52, 130, 320), fixedCost: cost(170, 270, 440), interests: ["culture", "adventure"] },
   ],
 
   forks: [

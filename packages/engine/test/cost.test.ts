@@ -1,9 +1,9 @@
+import assert from "node:assert/strict";
 // Paridad de coste con utils/costs.js de Africa. Valores calculados a mano con la
 // fórmula: activos·daily + descanso·daily·0.5 + voluntariado·8 + fijo·factor.
 import { test } from "node:test";
-import assert from "node:assert/strict";
-import { phaseCost, applyTravelersMultiplier, addonsCostFor } from "../src/index.ts";
 import { AFRICA_TRIP } from "../../../trips/africa/src/index.js";
+import { addonsCostFor, addonsDaysFor, applyTravelersMultiplier, phaseCost } from "../src/index.ts";
 
 const T = AFRICA_TRIP as never;
 
@@ -47,7 +47,45 @@ test("add-ons inexistentes no alteran el coste", () => {
   assert.equal(addonsCostFor(T, "watamu", ["nope"], "mid"), 0);
 });
 
+test("add-ons: coste y días extra de los seleccionados", () => {
+  const trip = {
+    tiers: ["low", "mid", "high"],
+    meta: {},
+    phases: [
+      {
+        id: "watamu",
+        title: "W",
+        daysBase: 0,
+        daysMin: 0,
+        daysMax: 0,
+        dailyCost: { low: 0, mid: 0, high: 0 },
+        fixedCost: { low: 0, mid: 0, high: 0 },
+      },
+    ],
+    forks: [],
+    sequence: [],
+    addons: {
+      watamu: [
+        { id: "balloon", label: "Globo", cost: { low: 380, mid: 450, high: 550 }, days: 1 },
+        { id: "spice", label: "Especias", cost: { low: 20, mid: 25, high: 30 } },
+      ],
+    },
+  } as never;
+  assert.equal(addonsCostFor(trip, "watamu", ["balloon"], "mid"), 450);
+  assert.equal(addonsCostFor(trip, "watamu", ["balloon", "spice"], "high"), 580); // 550 + 30
+  assert.equal(addonsDaysFor(trip, "watamu", ["balloon", "spice"]), 1); // solo balloon aporta días
+  assert.equal(addonsDaysFor(trip, "watamu", ["spice"]), 0);
+  // phaseCost suma el add-on al coste base.
+  assert.equal(phaseCost(trip, "watamu", 2, "mid", { addons: ["spice"] }), 25);
+});
+
 test("multiplicador por viajeros sale de costMultiplierRule (no hardcode)", () => {
   assert.equal(applyTravelersMultiplier(T, 1875, 1), 1875);
   assert.equal(applyTravelersMultiplier(T, 1875, 2), 3188); // round(1875·1.7)
+});
+
+test("multiplicador: grupo no listado en factorBy → fallback lineal ×N (issue #9)", () => {
+  // factorBy de Africa solo define 1 y 2. Para 3 viajeros NO hay dato → fallback ×3
+  // (Africa daba 1.7× a cualquier grupo; aquí el dato manda). Documentado en cost.ts.
+  assert.equal(applyTravelersMultiplier(T, 1000, 3), 3000);
 });

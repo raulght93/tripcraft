@@ -5,17 +5,20 @@
   "type": "module",
   "description": "Herramienta open-source de planificación de viajes (motor agnóstico al viaje).",
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "trips/*",
-    "apps/*",
-    "worker"
-  ],
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "test": "node --experimental-strip-types --test \"packages/**/test/*.test.ts\"",
-    "typecheck": "tsc -b packages/schema packages/engine"
+    "test:coverage": "node --experimental-strip-types --test --experimental-test-coverage \"packages/**/test/*.test.ts\"",
+    "typecheck": "tsc -p packages/schema/tsconfig.json && tsc -p packages/engine/tsconfig.json",
+    "lint": "biome check .",
+    "format": "biome format --write ."
   },
   "engines": {
     "node": ">=22.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
   }
 }

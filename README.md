@@ -11,7 +11,8 @@ que consume el viaje como **datos** en vez de tenerlo cableado en el código.
 
 ## Estado
 
-📋 **Fase 0 completada · Fase 1 en marcha** (suite del engine verde — `npm test`).
+📋 **Fase 0 completada · Fase 1 en marcha** · gate de calidad activo
+(`pnpm typecheck` + `pnpm lint` + `pnpm test` — 29 tests, cobertura núcleo 99% / 93%).
 
 Documentos del proyecto:
 - [`PRODUCT-ROADMAP.md`](PRODUCT-ROADMAP.md) — análisis, MVP, roadmap por fases, decisiones.
@@ -21,9 +22,19 @@ Documentos del proyecto:
 - [`docs/engineering-standards.md`](docs/engineering-standards.md) — **estándar de calidad / clean code** (núcleo puro, tests ≥90%, a11y como gate, budget de bundle, DoD).
 
 En curso: **Fase 1 — engine genérico**. Hecho: esqueleto completo de Africa migrado
-al schema (28 fases + 7 forks + secuencia) y motor (sequencer/coste/validación) con
-suite de tests de paridad. Pendiente: contenido editorial, POIs, especies,
-seasonality, add-ons; y el shell `apps/web`.
+al schema (28 fases + 7 forks + secuencia), motor (sequencer/coste/validación) con
+suite de paridad, y **gate de calidad cableado** (pnpm + tsc estricto + Biome + CI)
+tras la [review de Fase 1](docs/review-fase1.md). Modelo: tiers keyed, country ISO
+con bandera derivada, fuente única de tipos vía Valibot. Pendiente: contenido
+editorial, POIs, especies, seasonality, add-ons; y el shell `apps/web`.
+
+## Desarrollo
+
+```bash
+corepack enable            # pnpm vía corepack (Node ≥22.6)
+pnpm install
+pnpm typecheck && pnpm lint && pnpm test
+```
 
 ## Stack previsto
 

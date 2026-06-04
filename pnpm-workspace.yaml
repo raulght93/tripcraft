@@ -1,6 +1,3 @@
-# El repo funciona con npm workspaces (presente en el entorno) o pnpm.
-# Si usas pnpm, este archivo define los paquetes; si usas npm, lo hace el
-# campo "workspaces" de package.json. Mantener ambos en sync.
 packages:
   - "packages/*"
   - "trips/*"

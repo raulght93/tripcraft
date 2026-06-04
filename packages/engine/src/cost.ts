@@ -1,13 +1,16 @@
 // Motor de coste — agnóstico al viaje. Lee del documento Trip (no de constantes
 // de módulo). Réplica fiel de la fórmula de utils/costs.js de Africa, pero el
 // multiplicador por viajeros sale de trip.meta.costMultiplierRule (des-hardcodea
-// el 1.7×) y el índice de tier sale de trip.tiers (des-hardcodea low/mid/high).
-import type { Trip, Phase } from "../../schema/src/types.ts";
+// el 1.7×) y el coste por tier se lee KEYED por clave (des-hardcodea low/mid/high
+// y elimina la clase de bug de índices/longitudes).
+import type { Phase, Trip } from "@tripcraft/schema";
 
-const tierIndex = (trip: Trip, tier: string): number => {
-  const i = trip.tiers.indexOf(tier);
-  return i === -1 ? 0 : i;
-};
+/**
+ * Coste de un tier dado. Devuelve 0 si la fase no declara ese tier; esto es una
+ * red de seguridad — el guardián real es validateReferences (sequencer.ts), que
+ * exige una entrada por cada tier de trip.tiers antes de persistir el viaje.
+ */
+const tierCost = (byTier: Record<string, number>, tier: string): number => byTier[tier] ?? 0;
 
 export const findPhase = (trip: Trip, phaseId: string): Phase | undefined =>
   trip.phases.find((p) => p.id === phaseId);
@@ -32,7 +35,8 @@ export const phaseCost = (
 ): number => {
   const m = findPhase(trip, phaseId);
   if (!m) return 0;
-  const ti = tierIndex(trip, tier);
+  const daily = tierCost(m.dailyCost, tier);
+  const fixed = tierCost(m.fixedCost, tier);
   const rest = opts.restDays ?? 0;
   const volunteer = opts.volunteerDays ?? 0;
 
@@ -41,12 +45,7 @@ export const phaseCost = (
   else if (volunteer > 0) fixedFactor = 0.5;
   else fixedFactor = 0;
 
-  const base =
-    activeDays * m.dailyCost[ti] +
-    rest * m.dailyCost[ti] * 0.5 +
-    volunteer * 8 +
-    m.fixedCost[ti] * fixedFactor;
-
+  const base = activeDays * daily + rest * daily * 0.5 + volunteer * 8 + fixed * fixedFactor;
   return base + addonsCostFor(trip, phaseId, opts.addons, tier);
 };
 
@@ -59,10 +58,9 @@ export const addonsCostFor = (
   if (!selected || selected.length === 0) return 0;
   const list = trip.addons?.[phaseId];
   if (!list) return 0;
-  const ti = tierIndex(trip, tier);
   const ids = new Set(selected);
   let total = 0;
-  for (const a of list) if (ids.has(a.id)) total += a.cost[ti];
+  for (const a of list) if (ids.has(a.id)) total += tierCost(a.cost, tier);
   return total;
 };
 
@@ -80,14 +78,20 @@ export const addonsDaysFor = (
   return total;
 };
 
-/** Aplica el multiplicador por nº de viajeros definido en el viaje. */
+/**
+ * Aplica el multiplicador por nº de viajeros definido en el viaje.
+ *
+ * ⚠️ Comportamiento del fallback (issue #9 de la review): si `factorBy` no lista
+ * el tamaño de grupo, se asume escalado lineal ×N. Africa aplicaba 1.7× a CUALQUIER
+ * grupo ≥2 (probablemente un bug); aquí el dato manda — para soportar 3+ viajeros,
+ * añade su factor a `factorBy`. Cubierto por test explícito.
+ */
 export const applyTravelersMultiplier = (
   trip: Trip,
   perPersonCost: number,
   travelers: number,
 ): number => {
-  const rule = trip.meta.costMultiplierRule;
-  const factor = rule?.factorBy[String(travelers)];
+  const factor = trip.meta.costMultiplierRule?.factorBy[String(travelers)];
   if (factor == null) {
     return travelers <= 1 ? perPersonCost : Math.round(perPersonCost * travelers);
   }

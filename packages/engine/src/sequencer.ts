@@ -1,7 +1,7 @@
 // Sequencer — agnóstico al viaje. Reemplaza el ACTIVE_PHASES de Africa
 // (que cableaba el orden con seq.push(...) literal) por un recorrido genérico
 // de trip.sequence + la elección de forks/extensiones del usuario.
-import type { Trip, Fork } from "../../schema/src/types.ts";
+import type { Fork, Trip } from "@tripcraft/schema";
 
 export interface SequencerState {
   /** forkId → optionId elegido. Si falta, se usa el default del fork. */
@@ -55,6 +55,28 @@ export const validateReferences = (trip: Trip): string[] => {
   const errors: string[] = [];
   const phaseIds = new Set(trip.phases.map((p) => p.id));
 
+  // Cross-field: toda fase debe declarar un coste para CADA tier del viaje. Sin
+  // esto, un coste mal formado produciría NaN silencioso en phaseCost.
+  for (const phase of trip.phases) {
+    for (const tier of trip.tiers) {
+      if (typeof phase.dailyCost[tier] !== "number") {
+        errors.push(`phase "${phase.id}": falta dailyCost["${tier}"]`);
+      }
+      if (typeof phase.fixedCost[tier] !== "number") {
+        errors.push(`phase "${phase.id}": falta fixedCost["${tier}"]`);
+      }
+    }
+  }
+  for (const [phaseId, list] of Object.entries(trip.addons ?? {})) {
+    for (const addon of list) {
+      for (const tier of trip.tiers) {
+        if (typeof addon.cost[tier] !== "number") {
+          errors.push(`addon "${phaseId}/${addon.id}": falta cost["${tier}"]`);
+        }
+      }
+    }
+  }
+
   for (const fork of trip.forks) {
     const optionSet = new Set(fork.options);
     for (const opt of fork.options) {
@@ -74,7 +96,9 @@ export const validateReferences = (trip: Trip): string[] => {
     for (const [budget, byInterest] of Object.entries(fork.recs ?? {})) {
       for (const [interest, optId] of Object.entries(byInterest)) {
         if (!optionSet.has(optId)) {
-          errors.push(`fork "${fork.id}": recs[${budget}][${interest}] = "${optId}" no es una opción`);
+          errors.push(
+            `fork "${fork.id}": recs[${budget}][${interest}] = "${optId}" no es una opción`,
+          );
         }
       }
     }
@@ -89,7 +113,8 @@ export const validateReferences = (trip: Trip): string[] => {
     }
     if (item.kind === "extensionGroup") {
       for (const id of item.members) {
-        if (!phaseIds.has(id)) errors.push(`extensionGroup "${item.ref}": miembro "${id}" no existe`);
+        if (!phaseIds.has(id))
+          errors.push(`extensionGroup "${item.ref}": miembro "${id}" no existe`);
       }
     }
   }
