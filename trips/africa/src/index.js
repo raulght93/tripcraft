@@ -469,7 +469,60 @@ export const AFRICA_TRIP = {
 // (watamu/lamu/diani/safari-ke/mafia ya lo llevan inline.)
 // NOTA: los safetyNote de uganda/rwanda del original llevan apostillas políticas
 // informales; quedan pendientes de revisión del usuario antes de migrarlos al público.
+// Imágenes de comida curadas de Wikimedia Commons (500px), sustituyen los IDs
+// Unsplash rotos/duplicados del original (ver docs/feature-inventory.md).
+const FOOD_IMG = {
+  nyama: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Goat_meat_being_roasted.jpg/500px-Goat_meat_being_roasted.jpg",
+  mandazi: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Bowl_of_mandazi.jpg/500px-Bowl_of_mandazi.jpg",
+  ugali: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Ugali_%26_Sukuma_Wiki.jpg/500px-Ugali_%26_Sukuma_Wiki.jpg",
+  biryani: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/%22Hyderabadi_Dum_Biryani%22.jpg/500px-%22Hyderabadi_Dum_Biryani%22.jpg",
+  githeri: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Githeri_Meal.jpg/500px-Githeri_Meal.jpg",
+};
+
 const EDITORIAL = {
+  watamu: {
+    food: [
+      { name: "Pweza wa nazi", desc: "Pulpo en leche de coco con curry suave. Plato signature de la costa swahili.", price: "5-10€" },
+      { name: "Samaki wa kupaka", desc: "Pescado a la brasa con salsa de coco y especias. En chiringuitos de Watamu Beach.", price: "6-12€" },
+      { name: "Maharagwe ya nazi", desc: "Frijoles rojos en leche de coco con especias. Vegetariano tradicional.", price: "1-3€", veg: true },
+      { name: "Mahamri + chai", desc: "Buñuelos de cardamomo + té con leche y especias. Desayuno tradicional.", price: "1-3€", veg: true, img: FOOD_IMG.mandazi },
+      { name: "Crab Shack Watamu", desc: "Cangrejo de manglar grande con salsa cremosa. Mida Creek, atardecer. Reservar." },
+    ],
+  },
+  lamu: {
+    food: [
+      { name: "Biryani de pollo", desc: "El plato del viernes. Arroz basmati especiado, pollo, frutos secos, huevo.", price: "5-8€", img: FOOD_IMG.biryani },
+      { name: "Pwani fish curry", desc: "Curry de pescado con leche de coco y tamarindo. Hapa Foods cerca del mercado lo borda.", price: "4-7€" },
+      { name: "Mboga za majani", desc: "Verduras de hoja (espinaca, mchicha) salteadas en aceite de coco + tomate.", price: "1-2€", veg: true },
+      { name: "Halua de coco", desc: "Pasta de coco con azúcar quemado, cardamomo y rosa. Postre swahili icónico.", price: "0.5-1€", veg: true },
+      { name: "Café swahili turco", desc: "Cafetera de cobre, cardamomo, sin filtrar. Petley's Inn al atardecer es ritual.", price: "1€", veg: true },
+    ],
+  },
+  diani: {
+    food: [
+      { name: "Mishkaki", desc: "Brochetas de cabra/ternera marinadas al estilo costero. Ukunda 2-4€.", price: "2-4€" },
+      { name: "Octopus Diani-style", desc: "Pulpo a la brasa en Ali Barbour's Cave (cena en cueva natural).", price: "30-50€" },
+      { name: "Ugali + sukuma wiki", desc: "Polenta de maíz + col rizada salteada. Base vegetariana de la dieta keniana.", price: "2-3€", veg: true, img: FOOD_IMG.ugali },
+      { name: "Coconut chapatti + ndizi", desc: "Pan plano dulce + plátanos en leche de coco. Desayuno local típico.", price: "1-2€", veg: true },
+      { name: "Madafu helado", desc: "Coco verde frío recién abierto en la playa. El mejor 'cóctel' del país, vegano.", price: "1€", veg: true },
+    ],
+  },
+  "safari-ke": {
+    food: [
+      { name: "Nyama choma", desc: "Carne a la brasa (cabra) con ugali y kachumbari. El plato nacional.", price: "5-12€", img: FOOD_IMG.nyama },
+      { name: "Pilau", desc: "Arroz especiado con carne, influencia árabe. Mejor en familias maasai en Mara.", price: "3-6€" },
+      { name: "Ugali + sukuma wiki", desc: "Polenta de maíz + col rizada salteada. Plato base vegetariano.", price: "2-4€", veg: true, img: FOOD_IMG.ugali },
+      { name: "Githeri", desc: "Estofado de maíz y frijoles, plato kikuyu tradicional. Económico y saciante.", price: "2-3€", veg: true, img: FOOD_IMG.githeri },
+      { name: "Mandazi + chai", desc: "Buñuelos triangulares de coco y cardamomo + té con leche.", price: "0.5-1€", veg: true, img: FOOD_IMG.mandazi },
+    ],
+  },
+  mafia: {
+    food: [
+      { name: "Octopus curry mafia", desc: "Curry de pulpo con coco. La isla es famosa por su pesca de pulpo.", price: "6-10€" },
+      { name: "Tilapia frita Bagamoyo", desc: "Tilapia entera + ugali + chapati.", price: "4-7€" },
+      { name: "Wali wa nazi", desc: "Arroz cocido en leche de coco. Acompaña casi todo. Vegetariano por defecto.", price: "1-3€", veg: true },
+    ],
+  },
   mozambique: {
     hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Ilha_do_Ibo-sunset-02.jpg/500px-Ilha_do_Ibo-sunset-02.jpg",
     climateWarning: "⛈️ Temporada de ciclones activa: diciembre–abril, pico en feb–mar. El Canal de Mozambique tiene paso frecuente de ciclones tropicales. Las Quirimbas pueden quedar incomunicadas 1–5 días sin aviso previo. Contratad seguro de cancelación de vuelos interiores y no planifiquéis conexiones ajustadas en este período.",
@@ -517,9 +570,11 @@ const EDITORIAL = {
   },
   uganda: {
     climateWarning: "🌦️ Enero y febrero son los meses más secos de Uganda (temporada seca corta). Las noches en Bwindi pueden ser frías (8-12°C a 2.300m). El monte puede estar húmedo incluso en seco — calzado waterproof imprescindible para el trek de gorilas.",
+    safetyNote: "ℹ️ Uganda es uno de los países más estables de África Oriental para turistas. Las zonas del viaje (Bwindi, QENP, Murchison) tienen muy baja incidencia. Evitad la frontera con la RDC (oeste de Bwindi). Consultad el aviso FCO/MAEC una semana antes.",
   },
   rwanda: {
     climateWarning: "🌦️ Enero es la temporada seca en Ruanda. Los volcanes (Virunga) tienen niebla frecuente por las mañanas pero los treks se realizan igualmente. El Nyungwe puede estar neblinoso. Temperatura en los volcanes: 10-15°C de día, bajo 5°C de noche.",
+    safetyNote: "ℹ️ Ruanda es uno de los países más seguros de África subsahariana para turistas; Kigali está entre las capitales más limpias y ordenadas del continente. La frontera con la RDC (Goma) puede ser inestable — consultad el aviso oficial antes de acercaros.",
   },
   westafrica: {
     climateWarning: "🌧️ Estación seca útil de NOV a MAY. De jun a sep llueve fuerte (monzón de África Occidental) y la humedad hace los climas costeros muy duros; pistas del interior se cortan. El Harmattan (viento del Sáhara con polvo) afecta de dic a feb — cielos lechosos, visibilidad reducida para fotografía aérea.",

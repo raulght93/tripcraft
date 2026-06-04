@@ -49,6 +49,9 @@ test("una fase fija muestra hero, coste, datos prácticos, temporada y POIs", as
   expect(screen.getByRole("img", { name: /Safari Kenya/ })).toBeInTheDocument();
   expect(screen.getByText(/Datos prácticos/)).toBeInTheDocument();
   expect(screen.getByText(/Visado/)).toBeInTheDocument();
+  // Gastronomía (food curado con Wikimedia).
+  expect(screen.getByText(/Gastronomía/)).toBeInTheDocument();
+  expect(screen.getByText(/Nyama choma/)).toBeInTheDocument();
   // POIs migrados.
   expect(screen.getAllByText(/Nairobi/).length).toBeGreaterThan(0);
   expect(screen.getByText(/Maasai Mara NR/)).toBeInTheDocument();

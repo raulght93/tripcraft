@@ -123,6 +123,61 @@ export function PhaseView({ phaseId }) {
         </>
       ) : null}
 
+      {phase.food && phase.food.length > 0 ? (
+        <>
+          <h3 style={{ fontFamily: fonts.serif, fontSize: 20, margin: "24px 0 8px" }}>
+            Gastronomía ({phase.food.length})
+          </h3>
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
+            {phase.food.map((dish) => (
+              <li
+                key={dish.name}
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  padding: "10px 14px",
+                  borderRadius: radii.md,
+                  border: `1px solid ${colors.border}`,
+                  background: colors.surface,
+                }}
+              >
+                {dish.img ? (
+                  <img
+                    src={dish.img}
+                    alt=""
+                    loading="lazy"
+                    style={{
+                      width: 64,
+                      height: 48,
+                      objectFit: "cover",
+                      borderRadius: radii.sm,
+                      flexShrink: 0,
+                    }}
+                  />
+                ) : null}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600 }}>
+                    {dish.name}{" "}
+                    {dish.veg ? (
+                      <span role="img" aria-label="vegetariano">
+                        🌱
+                      </span>
+                    ) : null}
+                  </div>
+                  {dish.desc ? (
+                    <div style={{ fontSize: 13, color: colors.muted }}>{dish.desc}</div>
+                  ) : null}
+                  {dish.price ? (
+                    <div style={{ fontSize: 13, color: colors.accent }}>{dish.price}</div>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+
       {pois.length > 0 ? (
         <>
           <h3 style={{ fontFamily: fonts.serif, fontSize: 20, margin: "24px 0 8px" }}>

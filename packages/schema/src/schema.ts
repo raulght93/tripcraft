@@ -33,6 +33,18 @@ export const PhaseSchema = v.object({
   slides: v.optional(v.array(v.string())),
   /** Datos prácticos autodescriptivos (label→value), p.ej. Visado / Moneda / Enchufe. */
   info: v.optional(v.array(v.object({ label: v.string(), value: v.string() }))),
+  /** Platos típicos de la fase. */
+  food: v.optional(
+    v.array(
+      v.object({
+        name: v.string(),
+        desc: v.optional(v.string()),
+        price: v.optional(v.string()),
+        img: v.optional(v.string()),
+        veg: v.optional(v.boolean()),
+      }),
+    ),
+  ),
   climateWarning: v.optional(v.nullable(v.string())),
   safetyNote: v.optional(v.nullable(v.string())),
 });
