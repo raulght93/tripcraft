@@ -2,6 +2,7 @@ import { phaseCost } from "@tripcraft/engine";
 import { useState } from "react";
 import { colors, fonts, radii, shadows } from "../styles/tokens.js";
 import { useTrip } from "../trip/TripContext.jsx";
+import { PhaseView } from "./PhaseView.jsx";
 
 const fmtEUR = (n) => `${Math.round(n).toLocaleString("es-ES")} €`;
 
@@ -11,6 +12,7 @@ export function ForkView({ forkId }) {
   const fork = trip.forks.find((f) => f.id === forkId);
   if (!fork) return null;
   const chosen = forkChoice[forkId] ?? fork.default;
+  const chosenOmitted = (fork.omitWhenSelected ?? []).includes(chosen);
 
   return (
     <section
@@ -85,6 +87,14 @@ export function ForkView({ forkId }) {
           );
         })}
       </div>
+
+      {chosenOmitted ? (
+        <p style={{ marginTop: 20, color: colors.muted }}>El viaje continúa sin esta parada.</p>
+      ) : (
+        <div style={{ marginTop: 24, borderTop: `1px solid ${colors.border}` }}>
+          <PhaseView phaseId={chosen} />
+        </div>
+      )}
     </section>
   );
 }

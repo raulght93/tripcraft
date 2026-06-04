@@ -54,6 +54,16 @@ test("una fase fija muestra hero, coste, datos prácticos, temporada y POIs", as
   expect(screen.getByText(/Maasai Mara NR/)).toBeInTheDocument();
 });
 
+test("elegir una opción de fork muestra su detalle completo (avisos de seguridad)", async () => {
+  await renderApp();
+  fireEvent.click(screen.getByRole("tab", { name: /Final del viaje/ }));
+  // Detalle de la opción por defecto (Namibia) con su aviso de seguridad.
+  expect(screen.getByText(/más seguros de África/)).toBeInTheDocument();
+  // Cambiar a Ciudad del Cabo → su aviso de criminalidad (contenido migrado).
+  fireEvent.click(screen.getByRole("radio", { name: /Ciudad del Cabo/ }));
+  expect(screen.getByText(/criminalidad más altas del mundo/)).toBeInTheDocument();
+});
+
 test("el shell no tiene violaciones de accesibilidad (axe)", async () => {
   const { container } = await renderApp();
   expect(await axe(container)).toHaveNoViolations();

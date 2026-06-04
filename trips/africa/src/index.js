@@ -464,4 +464,71 @@ export const AFRICA_TRIP = {
   ],
 };
 
+// Enriquecimiento editorial (hero + clima + seguridad) fusionado sobre las fases,
+// para no inflar cada línea de `phases`. Migrado verbatim de phases/*.js + phaseInfo.js.
+// (watamu/lamu/diani/safari-ke/mafia ya lo llevan inline.)
+// NOTA: los safetyNote de uganda/rwanda del original llevan apostillas políticas
+// informales; quedan pendientes de revisión del usuario antes de migrarlos al público.
+const EDITORIAL = {
+  mozambique: {
+    hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Ilha_do_Ibo-sunset-02.jpg/500px-Ilha_do_Ibo-sunset-02.jpg",
+    climateWarning: "⛈️ Temporada de ciclones activa: diciembre–abril, pico en feb–mar. El Canal de Mozambique tiene paso frecuente de ciclones tropicales. Las Quirimbas pueden quedar incomunicadas 1–5 días sin aviso previo. Contratad seguro de cancelación de vuelos interiores y no planifiquéis conexiones ajustadas en este período.",
+    safetyNote: "⚠️ Seguridad: la insurgencia yihadista en Cabo Delgado está activa desde 2017 y afecta la provincia donde se encuentran Ibo y las Quirimbas. Consultad el aviso FCO/MAEC actualizado una semana antes del viaje. El acceso a las islas es exclusivamente por vía marítima o aérea desde Pemba — no por tierra desde el norte.",
+  },
+  comoros: {
+    climateWarning: "⛈️ Temporada de ciclones dic–abr, pico en feb–mar. Mohéli puede perder comunicaciones aéreas y marítimas durante 1–5 días en caso de ciclón activo. La infraestructura local para gestionar emergencias es muy limitada. Margen de tiempo extra imprescindible antes de vuelos de conexión.",
+    safetyNote: "ℹ️ País estable para turistas pero infraestructura caótica: cortes de luz frecuentes, ferries poco fiables, asistencia médica básica solo en Moroni (Gran Comora). Adecuado para viajeros con alta tolerancia a la improvisación.",
+  },
+  madagascar: {
+    hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Adansonia_grandidieri_Pat_Hooper.jpg/500px-Adansonia_grandidieri_Pat_Hooper.jpg",
+    climateWarning: "🌀 RIESGO DE CICLÓN ALTO: la temporada activa es dic–abr, con pico en ene–mar. Madagascar recibe de media 2–3 ciclones por año, algunos de categoría 4–5. Los vuelos interiores Tana↔Nosy Be pueden cancelarse 3–7 días seguidos. Contratad seguro de cancelación amplio y no planifiquéis salidas ajustadas.",
+    safetyNote: "ℹ️ Seguridad: crimen oportunista elevado en Antananarivo (carteristas, 'taxi scams'). No viajéis de noche por carretera (asaltos ocasionales en rutas rurales). Los lodges y operadores organizados reducen estos riesgos casi por completo.",
+  },
+  malawi: {
+    hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Nkatha_Bay_from_above.jpg/500px-Nkatha_Bay_from_above.jpg",
+  },
+  botswana: {
+    hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Okavango_Delta%2C_Botswana1.jpg/500px-Okavango_Delta%2C_Botswana1.jpg",
+  },
+  namibia: {
+    climateWarning: "🌧️ Abril marca el final de la temporada de lluvias en el norte de Namibia (Etosha/Damaraland). Las pistas de tierra pueden estar embarradas y algún tramo podría requerir 4x4 real. El sur (Sossusvlei, Fish River) está seco prácticamente todo el año. Temperaturas: 15–28°C (noches frías en el desierto, 5–10°C).",
+    safetyNote: "ℹ️ Namibia es uno de los países más seguros de África para turistas en coche. Windhoek tiene barrios a evitar de noche, pero fuera de la capital el riesgo es mínimo. Llevad siempre agua extra (5L mínimo por persona) — las averías en pista pueden ser peligrosas sin recursos.",
+  },
+  capetown: {
+    hero: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Camps_bay_%2853460319478%29_%28cropped%29.jpg/500px-Camps_bay_%2853460319478%29_%28cropped%29.jpg",
+    climateWarning: "🍂 Abril es otoño en el Cabo: temperaturas agradables (18–24°C), viñedos con colores de vendimia, menos turistas. Las lluvias de invierno empiezan en mayo–junio (clima mediterráneo). Table Mountain puede tener nube 'mantel' cualquier mes.",
+    safetyNote: "⚠️ Seguridad: Sudáfrica tiene una de las tasas de criminalidad más altas del mundo. En Ciudad del Cabo: no entréis en townships sin acompañante, no dejéis objetos visibles en el coche, no uséis el teléfono en la calle en zonas concurridas. Bo-Kaap, V&A Waterfront y el centro de día son seguros. De noche: Uber en vez de taxis de calle.",
+  },
+  sodwana: {
+    climateWarning: "🌊 Abril en KwaZulu-Natal es otoño austral: temperatura del agua 23–25°C (excelente para buceo), clima cálido y seco (26–30°C). Tiempo óptimo para esta zona. El Drakensberg puede tener lluvias de tarde residuales de verano.",
+    safetyNote: "ℹ️ Seguridad: la zona costera de iSimangaliso/Sodwana es rural y tranquila con muy baja incidencia. Durban (si hacéis escala) requiere las mismas precauciones que cualquier ciudad sudafricana grande.",
+  },
+  ethiopia: {
+    climateWarning: "🌧️ Ventana climática estrecha: mayo es el último mes razonable antes de las lluvias largas (kiremt, jun–sep). Si llegáis en junio, el Simien Trek se vuelve muy resbaladizo y algunos tramos se cierran. Lalibela y el Omo Valley aguantan mejor en junio.",
+    safetyNote: "ℹ️ Seguridad: el conflicto de Tigray (noreste) lleva en tregua desde nov-2022 pero la zona sigue desaconsejada. La ruta habitual (Addis, Simien, Lalibela, Gondar, Omo) está en áreas seguras. Consultad el aviso MAEC/FCO una semana antes.",
+  },
+  egypt: {
+    climateWarning: "🌡️ Calor extremo en may–jun: El Cairo 36–42°C, Luxor y Asuán 42–48°C. Las visitas exteriores solo son cómodas antes de las 9am y después de las 18pm. Khamsin: vientos de arena del Sáhara frecuentes en abr–may que reducen la visibilidad y pueden durar días. Hidratación estricta obligatoria.",
+    safetyNote: "ℹ️ Seguridad: El Cairo, Luxor, Asuán y el Mar Rojo (Hurghada/Dahab) son zonas bien vigiladas y seguras para turistas. La Península del Sinaí (excepto Dahab y Sharm) tiene aviso FCO activo. No fotografiéis instalaciones militares ni policiales.",
+  },
+  jordan: {
+    climateWarning: "☀️ Junio marca el inicio del verano desértico: Wadi Rum 38–44°C (las rocas pueden superar los 55°C), Petra 35–40°C. Las caminatas largas solo son seguras antes de las 9am o después de las 18pm. Llevad mínimo 3L de agua por persona para rutas de 3+ horas.",
+    safetyNote: "ℹ️ Jordania es uno de los países más seguros de Oriente Medio para turistas. Amman, Petra y Wadi Rum tienen infraestructura turística consolidada. Aqaba (Mar Rojo) es tranquila.",
+  },
+  uganda: {
+    climateWarning: "🌦️ Enero y febrero son los meses más secos de Uganda (temporada seca corta). Las noches en Bwindi pueden ser frías (8-12°C a 2.300m). El monte puede estar húmedo incluso en seco — calzado waterproof imprescindible para el trek de gorilas.",
+  },
+  rwanda: {
+    climateWarning: "🌦️ Enero es la temporada seca en Ruanda. Los volcanes (Virunga) tienen niebla frecuente por las mañanas pero los treks se realizan igualmente. El Nyungwe puede estar neblinoso. Temperatura en los volcanes: 10-15°C de día, bajo 5°C de noche.",
+  },
+  westafrica: {
+    climateWarning: "🌧️ Estación seca útil de NOV a MAY. De jun a sep llueve fuerte (monzón de África Occidental) y la humedad hace los climas costeros muy duros; pistas del interior se cortan. El Harmattan (viento del Sáhara con polvo) afecta de dic a feb — cielos lechosos, visibilidad reducida para fotografía aérea.",
+    safetyNote: "ℹ️ Seguridad por país: Senegal, Gambia, Ghana, Togo y Benín (sur) en condiciones normales. EVITAR el norte de Benín y Togo (frontera con Burkina Faso/Níger, aviso FCO/MAEC por yihadismo). EVITAR la Casamance profunda si hay rebrote MFDC. Carteristas en Dakar Plateau y Accra Makola. Certificado de fiebre amarilla obligatorio.",
+  },
+};
+for (const p of AFRICA_TRIP.phases) {
+  const e = EDITORIAL[p.id];
+  if (e) Object.assign(p, e);
+}
+
 export default AFRICA_TRIP;
