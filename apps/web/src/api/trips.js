@@ -52,7 +52,9 @@ export async function getTrip(id) {
 
 /** POST /api/trips → crea un viaje a partir de un doc (clona una plantilla). */
 export async function createTrip(doc, baseTemplateId) {
-  return validateStoredTrip(await api("/api/trips", { method: "POST", body: { doc, baseTemplateId } }));
+  return validateStoredTrip(
+    await api("/api/trips", { method: "POST", body: { doc, baseTemplateId } }),
+  );
 }
 
 /** PUT /api/trips/:id → actualiza el doc (incrementa versión). */

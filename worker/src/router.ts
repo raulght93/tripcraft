@@ -75,9 +75,16 @@ export async function handleApi(request: Request, ctx: RouterCtx): Promise<Respo
         version: 1,
         updatedAt: ctx.now(),
         doc,
+        state: body.state,
       };
-      await storage.put(validateStoredTrip(stored));
-      return json(stored, 201);
+      let valid: ReturnType<typeof validateStoredTrip>;
+      try {
+        valid = validateStoredTrip(stored);
+      } catch {
+        return json({ error: "viaje inválido" }, 400);
+      }
+      await storage.put(valid);
+      return json(valid, 201);
     }
     return json({ error: "método no permitido" }, 405);
   }
@@ -103,9 +110,16 @@ export async function handleApi(request: Request, ctx: RouterCtx): Promise<Respo
       version: existing.version + 1,
       updatedAt: ctx.now(),
       doc,
+      state: body.state ?? existing.state,
     };
-    await storage.put(updated);
-    return json(updated);
+    let valid: ReturnType<typeof validateStoredTrip>;
+    try {
+      valid = validateStoredTrip(updated);
+    } catch {
+      return json({ error: "viaje inválido" }, 400);
+    }
+    await storage.put(valid);
+    return json(valid);
   }
 
   if (request.method === "DELETE") {

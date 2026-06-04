@@ -13,6 +13,7 @@ type StoredLike = {
   version: number;
   updatedAt: string;
   doc: { id: string; title: string };
+  state?: { tier?: string; forkChoice?: Record<string, string> };
 };
 
 const ctxFor = (storage: TripStorage, ownerId: string | null) => ({
@@ -61,6 +62,20 @@ test("POST con owner crea un StoredTrip (clon de plantilla)", async () => {
   assert.equal(stored.baseTemplateId, "africa-2026");
   assert.equal(stored.version, 1);
   assert.equal(stored.doc.id, "africa-2026");
+});
+
+test("POST persiste la selección del usuario (state)", async () => {
+  const res = await handleApi(
+    req("POST", "/api/trips", {
+      doc: AFRICA_TRIP,
+      state: { tier: "high", forkChoice: { fork2: "capetown" } },
+    }),
+    ctxFor(createMemoryStorage(), "dev1"),
+  );
+  assert.equal(res.status, 201);
+  const stored = await readStored(res);
+  assert.equal(stored.state?.tier, "high");
+  assert.equal(stored.state?.forkChoice?.fork2, "capetown");
 });
 
 test("POST con documento inválido → 400", async () => {

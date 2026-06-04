@@ -154,11 +154,21 @@ export const TripSchema = v.object({
   species: v.optional(v.array(SpeciesSchema)),
 });
 
+/** Selección del usuario sobre una plantilla (forks, nivel, fechas, días). */
+export const TripSelectionSchema = v.object({
+  forkChoice: v.optional(v.record(v.string(), v.string())),
+  tier: v.optional(v.string()),
+  startDate: v.optional(v.string()),
+  extensions: v.optional(v.record(v.string(), v.boolean())),
+  daysByPhase: v.optional(v.record(v.string(), v.number())),
+});
+
 /**
  * Envelope de persistencia (contrato del backend, Fase 2). Un viaje almacenado =
- * el documento `doc` (validado) + metadatos. Modelo de storage: **documento JSON
- * único** (un blob por viaje en D1/KV), no normalizado. `baseTemplateId` enlaza un
- * clon con la plantilla de la que salió; `ownerId` ausente = plantilla del catálogo.
+ * el documento `doc` (validado) + la `state` del usuario + metadatos. Modelo de
+ * storage: **documento JSON único** (un blob por viaje en D1/KV), no normalizado.
+ * `baseTemplateId` enlaza un clon con la plantilla de la que salió; `ownerId`
+ * ausente = plantilla del catálogo.
  */
 export const StoredTripSchema = v.object({
   id: v.string(),
@@ -168,11 +178,13 @@ export const StoredTripSchema = v.object({
   version: v.number(),
   updatedAt: v.string(),
   doc: TripSchema,
+  state: v.optional(TripSelectionSchema),
 });
 
 // ── Tipos derivados (fuente única) ────────────────────────────────────────────
 export type Trip = v.InferOutput<typeof TripSchema>;
 export type StoredTrip = v.InferOutput<typeof StoredTripSchema>;
+export type TripSelection = v.InferOutput<typeof TripSelectionSchema>;
 export type Phase = v.InferOutput<typeof PhaseSchema>;
 export type Fork = v.InferOutput<typeof ForkSchema>;
 export type SequenceItem = v.InferOutput<typeof SequenceItemSchema>;

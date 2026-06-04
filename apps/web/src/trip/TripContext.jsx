@@ -75,6 +75,21 @@ function TripState({ trip, children }) {
   );
   const legByPhase = useMemo(() => itineraryByPhase(itinerary), [itinerary]);
 
+  // Selección del usuario (lo que se persiste como StoredTrip.state).
+  const selection = useMemo(() => ({ forkChoice, tier, startDate }), [forkChoice, tier, startDate]);
+  const applyState = useCallback(
+    (s) => {
+      if (!s) return;
+      if (s.forkChoice) {
+        setForkChoice(s.forkChoice);
+        saveLS(lsKey(trip.id, "forks"), s.forkChoice);
+      }
+      if (s.tier) setTier(s.tier);
+      if (s.startDate) setStartDate(s.startDate);
+    },
+    [trip.id, setTier, setStartDate],
+  );
+
   const value = useMemo(
     () => ({
       trip,
@@ -88,6 +103,8 @@ function TripState({ trip, children }) {
       phaseById,
       itinerary,
       legByPhase,
+      selection,
+      applyState,
     }),
     [
       trip,
@@ -101,6 +118,8 @@ function TripState({ trip, children }) {
       phaseById,
       itinerary,
       legByPhase,
+      selection,
+      applyState,
     ],
   );
 

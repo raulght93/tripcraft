@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ForkView } from "./components/ForkView.jsx";
 import { Header } from "./components/Header.jsx";
+import { MyTripsPanel } from "./components/MyTripsPanel.jsx";
 import { PhaseView } from "./components/PhaseView.jsx";
 import { SpeciesPanel } from "./components/SpeciesPanel.jsx";
 import { TabBar } from "./components/TabBar.jsx";
@@ -29,6 +30,7 @@ function ExtensionsView({ members }) {
 const META_TABS = [
   { id: "itinerary", kind: "meta", label: "Itinerario", icon: "📅" },
   { id: "species", kind: "meta", label: "Fauna", icon: "🦁" },
+  { id: "mytrips", kind: "meta", label: "Mis viajes", icon: "💾" },
 ];
 
 export function App() {
@@ -46,6 +48,7 @@ export function App() {
       <main id="main">
         {active?.id === "itinerary" ? <Timeline onSelectPhase={setActiveTab} /> : null}
         {active?.id === "species" ? <SpeciesPanel /> : null}
+        {active?.id === "mytrips" ? <MyTripsPanel onNavigate={setActiveTab} /> : null}
         {active?.kind === "fork" ? <ForkView forkId={active.id} onNavigate={setActiveTab} /> : null}
         {active?.kind === "phase" ? (
           <PhaseView phaseId={active.id} onNavigate={setActiveTab} />
